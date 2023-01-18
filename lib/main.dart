@@ -1,23 +1,20 @@
-import 'package:fashion_shopping_app/modules/home/bloc/cubit/product_cubit.dart';
-import 'package:fashion_shopping_app/modules/home/data/repository/product_repository.dart';
-import 'package:fashion_shopping_app/modules/home/views/search_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import 'package:fashion_shopping_app/core/widgets/loading/loading_circle.dart';
-import 'package:fashion_shopping_app/modules/auth/bloc/cubit/login_cubit.dart';
-import 'package:fashion_shopping_app/modules/auth/data/repository/auth_repository.dart';
-import 'package:fashion_shopping_app/modules/auth/views/welcome_view.dart';
-import 'package:fashion_shopping_app/modules/layout/bloc/cubit/layout_cubit.dart';
-import 'package:fashion_shopping_app/core/theme/app_theme.dart';
-import 'package:fashion_shopping_app/core/theme/theme_cubit.dart';
-import 'package:fashion_shopping_app/modules/auth/bloc/cubit/auth_cubit.dart';
-import 'package:fashion_shopping_app/modules/layout/views/layout_view.dart';
+import 'package:fashion_shopping_app/di.dart';
+import 'package:fashion_shopping_app/app_binding.dart';
+import 'package:fashion_shopping_app/core/constants/color.dart';
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
+import 'package:fashion_shopping_app/core/theme/theme_data.dart';
+import 'package:fashion_shopping_app/core/translations/app_translations.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env");
+  WidgetsFlutterBinding.ensureInitialized();
+  await DenpendencyInjection.init();
+
   runApp(const MyApp());
+  configLoading();
 }
 
 class MyApp extends StatelessWidget {
@@ -25,56 +22,34 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final repositoryList = [
-      RepositoryProvider(create: (context) => AuthRepository()),
-      RepositoryProvider(create: (context) => ProductRepository()),
-    ];
-    final blocList = [
-      BlocProvider(create: (context) => ThemeCubit()),
-      BlocProvider(create: (context) => AuthCubit()),
-      BlocProvider(
-        create: (context) => LoginCubit(
-          authRepository: context.read<AuthRepository>(),
-        ),
-      ),
-      BlocProvider(create: (context) => LayoutCubit()),
-      BlocProvider(
-        create: (context) => ProductCubit(
-          productRepository: context.read<ProductRepository>(),
-        ),
-      ),
-    ];
-
-    return MultiRepositoryProvider(
-      providers: repositoryList,
-      child: MultiBlocProvider(
-        providers: blocList,
-        child: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, themeMode) => MaterialApp(
-            title: 'Fashion Shopping App',
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeMode,
-            home: FutureBuilder(
-                future: context.read<AuthCubit>().tryAutoLogin(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Scaffold(body: LoadingCircle());
-                  } else {
-                    final isLogin = snapshot.data;
-                    return isLogin == true
-                        ? const LayoutView()
-                        : const WelcomeView();
-                  }
-                }),
-            routes: {
-              LayoutView.routeName: (ctx) => const LayoutView(),
-              WelcomeView.routeName: (ctx) => const WelcomeView(),
-              SearchView.routeName: (ctx) => const SearchView(),
-            },
-          ),
-        ),
-      ),
+    return GetMaterialApp(
+      builder: EasyLoading.init(),
+      title: 'Fashion Shopping App',
+      theme: ThemeConfig.lightTheme,
+      translations: AppTranslations(),
+      locale: AppTranslations.locale,
+      fallbackLocale: AppTranslations.fallbackLocale,
+      initialRoute: Routes.splash,
+      getPages: AppPages.routes,
+      debugShowCheckedModeBanner: false,
+      enableLog: true,
+      defaultTransition: Transition.fade,
+      initialBinding: AppBinding(),
+      smartManagement: SmartManagement.keepFactory,
     );
   }
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.cubeGrid
+    ..loadingStyle = EasyLoadingStyle.custom
+    ..radius = 5
+    ..boxShadow = []
+    ..backgroundColor = ColorConstants.lightGray
+    ..indicatorColor = ColorConstants.primary
+    ..textColor = ColorConstants.black
+    ..userInteractions = false
+    ..dismissOnTap = false
+    ..animationStyle = EasyLoadingAnimationStyle.scale;
 }
