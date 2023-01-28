@@ -1,14 +1,13 @@
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
-import 'package:fashion_shopping_app/core/widgets/button/base_button.dart';
-import 'package:fashion_shopping_app/core/widgets/checkbox/base_checkbox.dart';
-import 'package:fashion_shopping_app/core/widgets/form/base_input_field.dart';
-import 'package:fashion_shopping_app/core/widgets/text/base_text.dart';
+import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
+import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
+import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
+import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:fashion_shopping_app/modules/auth/auth_controller.dart';
 import 'package:fashion_shopping_app/modules/auth/widgets/oauth_buttons.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
-
 
 class LoginScreen extends StatelessWidget {
   final AuthController controller = Get.arguments;
@@ -32,15 +31,12 @@ class LoginScreen extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  const BaseText('Sign in with', fontSize: 16),
+                  const BaseText('Or sign in with', fontSize: 16),
                   const SizedBox(height: 4),
                   OauthButtons(),
                 ],
               ),
-              const SizedBox(
-                height: 16,
-                width: double.infinity,
-              )
+              const SizedBox(height: 20, width: double.infinity),
             ],
           ),
         ),
@@ -118,6 +114,7 @@ class LoginScreen extends StatelessWidget {
       controller: controller.loginIdentifyController,
       keyboardType: TextInputType.text,
       hintText: 'Username or email',
+      prefixIcon: const Icon(Icons.account_circle),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Username or email is required.';
@@ -130,9 +127,9 @@ class LoginScreen extends StatelessWidget {
   Widget _buildPasswordField() {
     return BaseInputField(
       controller: controller.loginPasswordController,
-      keyboardType: TextInputType.emailAddress,
       hintText: 'Password',
       isPasswordField: true,
+      prefixIcon: const Icon(Icons.lock),
       validator: (value) {
         if (value!.isEmpty) {
           return 'Password is required.';

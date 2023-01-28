@@ -1,8 +1,8 @@
-import 'package:fashion_shopping_app/core/constants/storage_key.dart';
-import 'package:fashion_shopping_app/core/helpers/focus.dart';
-import 'package:fashion_shopping_app/core/helpers/notify.dart';
-import 'package:fashion_shopping_app/core/models/request/login_request.dart';
-import 'package:fashion_shopping_app/core/models/request/register_request.dart';
+import 'package:fashion_shopping_app/shared/constants/storage_key.dart';
+import 'package:fashion_shopping_app/shared/helpers/focus.dart';
+import 'package:fashion_shopping_app/shared/helpers/notify.dart';
+import 'package:fashion_shopping_app/core/models/request/login.dart';
+import 'package:fashion_shopping_app/core/models/request/register.dart';
 import 'package:fashion_shopping_app/core/repositories/auth_repository.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -65,46 +65,41 @@ class AuthController extends GetxController {
     }
   }
 
-  void login(BuildContext context) async {
+  Future<void> login(BuildContext context) async {
     AppFocus.unfocus(context);
     if (loginFormKey.currentState!.validate()) {
       final res = await authRepository.login(
-        LoginRequest(
+        Login(
           identify: loginIdentifyController.text,
           password: loginPasswordController.text,
         ),
       );
       if (res == null) return;
-
       _saveToken(res.access, res.refresh);
     }
   }
 
-  void oauthGoogle() async {
+  Future<void> oauthGoogle() async {
     final signInData = await _googleSignIn.signIn();
     final sessionData = await signInData!.authentication;
-
     final res = await authRepository.oauthGoogle(sessionData.idToken!);
     if (res == null) return;
-
     _saveToken(res.access, res.refresh);
   }
 
-  void oauthFacebook(String token) async {
+  Future<void> oauthFacebook() async {
     final LoginResult result = await FacebookAuth.instance.login();
     if (result.status != LoginStatus.success) {
       Notify.error('Something went wrong');
       return;
     }
-
     final accessToken = result.accessToken!;
     final res = await authRepository.oauthFacebook(accessToken.token);
     if (res == null) return;
-
     _saveToken(res.access, res.refresh);
   }
 
-  void register(BuildContext context) async {
+  Future<void> register(BuildContext context) async {
     AppFocus.unfocus(context);
     if (registerFormKey.currentState!.validate()) {
       if (!registerTermsChecked.value) {
@@ -112,7 +107,7 @@ class AuthController extends GetxController {
         return;
       }
       final res = await authRepository.register(
-        RegisterRequest(
+        Register(
           firstName: registerFirstNameController.text,
           lastName: registerLastNameController.text,
           username: registerUsernameController.text,

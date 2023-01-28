@@ -8,7 +8,7 @@ import Foundation
 import facebook_auth_desktop
 import flutter_secure_storage_macos
 import path_provider_macos
-import shared_preferences_macos
+import shared_preferences_foundation
 import sqflite
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {

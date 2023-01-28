@@ -1,7 +1,8 @@
+import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:fashion_shopping_app/core/constants/tabs.dart';
+import 'package:fashion_shopping_app/shared/constants/tabs.dart';
 import 'package:fashion_shopping_app/modules/layout/layout_controller.dart';
 
 class LayoutScreen extends GetView<LayoutController> {
@@ -21,32 +22,40 @@ class LayoutScreen extends GetView<LayoutController> {
         child: _buildContent(controller.currentTab.value),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
+            icon: Icon(
+              Icons.home,
+              color: ColorConstants.primary,
+            ),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
-            label: "Inbox",
+            icon: Icon(
+              Icons.chat,
+              color: ColorConstants.primary,
+            ),
+            label: 'Inbox',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_box),
-            label: "Account",
+            icon: Icon(
+              Icons.favorite,
+              color: ColorConstants.primary,
+            ),
+            label: 'Favorite',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.home),
-          //   label: "Resource",
-          // ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.home),
-          //   label: "Resource",
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.account_box,
+              color: ColorConstants.primary,
+            ),
+            label: 'Account',
+          ),
         ],
         type: BottomNavigationBarType.fixed,
         unselectedItemColor: Colors.black,
         currentIndex: controller.getCurrentIndex(controller.currentTab.value),
-        selectedItemColor: Colors.black,
+        selectedItemColor: ColorConstants.primary,
         selectedLabelStyle: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.bold,
@@ -56,18 +65,16 @@ class LayoutScreen extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildContent(MainTabs tab) {
+  Widget _buildContent(Tabs tab) {
     switch (tab) {
-      case MainTabs.home:
+      case Tabs.home:
         return controller.homeTab;
-      // case MainTabs.discover:
-      //   return controller.discoverTab;
-      // case MainTabs.resource:
-      //   return controller.resourceTab;
-      case MainTabs.inbox:
+      case Tabs.inbox:
         return controller.inboxTab;
-      case MainTabs.me:
+      case Tabs.me:
         return controller.accountTab;
+      case Tabs.favorite:
+        return controller.favoriteTab;
       default:
         return controller.homeTab;
     }

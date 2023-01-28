@@ -1,5 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:fashion_shopping_app/core/constants/storage_key.dart';
+import 'package:fashion_shopping_app/shared/constants/storage_key.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,19 +1,28 @@
-import 'package:fashion_shopping_app/modules/account_tab/account_binding.dart';
+import 'package:get/get.dart';
+
+import 'package:fashion_shopping_app/modules/address/address_binding.dart';
+import 'package:fashion_shopping_app/modules/address/address_screen.dart';
+import 'package:fashion_shopping_app/modules/address_detail/address_detail_binding.dart';
+import 'package:fashion_shopping_app/modules/address_detail/address_detail_screen.dart';
+import 'package:fashion_shopping_app/modules/discount_ticket/discount_ticket_binding.dart';
+import 'package:fashion_shopping_app/modules/discount_ticket/discount_ticket_screen.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/account_tab/account_binding.dart';
 import 'package:fashion_shopping_app/modules/auth/auth_binding.dart';
 import 'package:fashion_shopping_app/modules/auth/auth_screen.dart';
 import 'package:fashion_shopping_app/modules/auth/login_screen.dart';
 import 'package:fashion_shopping_app/modules/auth/register_screen.dart';
 import 'package:fashion_shopping_app/modules/cart/cart_binding.dart';
 import 'package:fashion_shopping_app/modules/cart/cart_screen.dart';
-import 'package:fashion_shopping_app/modules/home_tab/home_binding.dart';
-import 'package:fashion_shopping_app/modules/inbox_tab/inbox_binding.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/home_tab/home_binding.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/inbox_tab/inbox_binding.dart';
 import 'package:fashion_shopping_app/modules/layout/layout_binding.dart';
 import 'package:fashion_shopping_app/modules/layout/layout_screen.dart';
+import 'package:fashion_shopping_app/modules/order_detail/order_detail_binding.dart';
+import 'package:fashion_shopping_app/modules/order_detail/order_detail_screen.dart';
 import 'package:fashion_shopping_app/modules/product_detail/product_detail_binding.dart';
 import 'package:fashion_shopping_app/modules/product_detail/product_detail_screen.dart';
 import 'package:fashion_shopping_app/modules/splash/splash_binding.dart';
 import 'package:fashion_shopping_app/modules/splash/splash_screen.dart';
-import 'package:get/get.dart';
 
 part 'app_routes.dart';
 
@@ -43,6 +52,7 @@ class AppPages {
         HomeBinding(),
         InboxBinding(),
         AccountBinding(),
+        CartBinding(),
       ],
     ),
     GetPage(
@@ -54,6 +64,26 @@ class AppPages {
       name: Routes.cart,
       page: () => const CartScreen(),
       binding: CartBinding(),
+    ),
+    GetPage(
+      name: Routes.orderDetail,
+      page: () => const OrderDetailScreen(),
+      binding: OrderDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.address,
+      page: () => const AddressScreen(),
+      binding: AddressBinding(),
+    ),
+    GetPage(
+      name: Routes.addressDetail,
+      page: () => const AddressDetailScreen(),
+      binding: AddressDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.discountTicket,
+      page: () => const DiscountTicketScreen(),
+      binding: DiscountTicketBinding(),
     ),
   ];
 }

@@ -1,19 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:fashion_shopping_app/core/models/response/product_short.dart';
+
 class ProductType {
   final int id;
   final String color;
   final String size;
-  final int quantity;
+  final int stocks;
   final double price;
+  final ProductShort? product;
 
   ProductType({
     required this.id,
     required this.color,
     required this.size,
-    required this.quantity,
+    required this.stocks,
     required this.price,
+    this.product,
   });
 
   Map<String, dynamic> toMap() {
@@ -21,8 +25,9 @@ class ProductType {
       'id': id,
       'color': color,
       'size': size,
-      'quantity': quantity,
+      'stocks': stocks,
       'price': price,
+      'product': product?.toMap(),
     };
   }
 
@@ -31,8 +36,11 @@ class ProductType {
       id: map['id'] as int,
       color: map['color'] as String,
       size: map['size'] as String,
-      quantity: map['quantity'] as int,
+      stocks: map['stocks'] as int,
       price: map['price'] as double,
+      product: map['product'] != null
+          ? ProductShort.fromMap(map['product'] as Map<String, dynamic>)
+          : null,
     );
   }
 

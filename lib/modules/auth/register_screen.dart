@@ -1,10 +1,10 @@
-import 'package:fashion_shopping_app/core/widgets/button/base_button.dart';
-import 'package:fashion_shopping_app/core/widgets/checkbox/base_checkbox.dart';
-import 'package:fashion_shopping_app/core/widgets/form/base_input_field.dart';
+import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
+import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
+import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:fashion_shopping_app/core/widgets/text/base_text.dart';
+import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:fashion_shopping_app/modules/auth/auth_controller.dart';
 import 'package:fashion_shopping_app/modules/auth/widgets/oauth_buttons.dart';
 
@@ -37,7 +37,7 @@ class RegisterScreen extends StatelessWidget {
                   OauthButtons(),
                 ],
               ),
-              const SizedBox(height: 16, width: double.infinity),
+              const SizedBox(height: 20, width: double.infinity),
             ],
           ),
         ),
