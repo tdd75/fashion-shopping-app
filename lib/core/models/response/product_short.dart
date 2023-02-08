@@ -6,6 +6,7 @@ class ProductShort {
   final String name;
   final String image;
   final double rating;
+  final bool isFavorite;
   final List<double> priceRange;
 
   ProductShort({
@@ -13,6 +14,7 @@ class ProductShort {
     required this.name,
     required this.image,
     required this.rating,
+    required this.isFavorite,
     required this.priceRange,
   });
 
@@ -22,6 +24,7 @@ class ProductShort {
       'name': name,
       'image': image,
       'rating': rating,
+      'is_favorite': isFavorite,
       'price_range': priceRange,
     };
   }
@@ -32,6 +35,7 @@ class ProductShort {
       name: map['name'] as String,
       image: map['image'] as String,
       rating: map['rating'] as double,
+      isFavorite: map['is_favorite'] as bool,
       priceRange: List<double>.from((map['price_range'])),
     );
   }

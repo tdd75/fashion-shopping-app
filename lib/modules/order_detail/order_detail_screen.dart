@@ -1,25 +1,26 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashion_shopping_app/core/models/response/address.dart';
 import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
-import 'package:fashion_shopping_app/core/models/response/discount_ticket.dart';
-import 'package:fashion_shopping_app/core/routes/app_pages.dart';
+import 'package:fashion_shopping_app/core/models/response/order.dart';
 import 'package:fashion_shopping_app/modules/order_detail/order_detail_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
+import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
+import 'package:fashion_shopping_app/shared/enums/payment_method.dart';
+import 'package:fashion_shopping_app/shared/helpers/notify.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
+import 'package:fashion_shopping_app/shared/widgets/order/order_item.dart';
+import 'package:fashion_shopping_app/shared/widgets/reviews/reviews_dialog.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_currency_text.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../shared/helpers/notify.dart';
+import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderDetailScreen extends GetView<OrderDetailController> {
   const OrderDetailScreen({super.key});
 
-  List<CartItem>? get cartItems => controller.cartItems;
-  Address? get address => controller.address.value;
-  DiscountTicket? get discountTicket => controller.discountTicket.value;
+  Order get order => controller.order.value!;
 
   @override
   Widget build(BuildContext context) {
@@ -27,101 +28,187 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
       if (controller.isLoading.value) return const BaseLoading();
       return Scaffold(
         appBar: AppBar(
-          title: Text(controller.id != null ? 'Order Detail' : 'Checkout'),
+          title: const Text('Order Detail'),
         ),
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildAddress(),
-              const SizedBox(height: 12),
-              const BaseText(
-                'Items',
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: Wrap(
+                  children: [
+                    const BaseText(
+                      'Order Code: ',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    BaseText(
+                      controller.order.value!.code,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: ColorConstants.primary,
+                    ),
+                  ],
+                ),
               ),
-              Divider(color: ColorConstants.darkGray, thickness: 1),
+              _buildAddress(),
               _buildOrderItemList(),
               const SizedBox(height: 24),
-              _buildDiscountTicket(),
-              const SizedBox(height: 24),
               _buildOrderDetails(),
+              const SizedBox(height: 12),
+              _buildPaymentMethod(),
             ],
           ),
         ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.all(12),
-          child: BaseButton(
-            text: 'Pay now',
-            onPressed: () async {
-              if (address == null) {
-                Notify.warning('Please add delivery address');
-                return;
-              }
-              final result = await controller.createOrder();
-              if (result == true) {
-                Get.back();
-                Notify.success('Order created successfully');
-              }
-            },
-          ),
-        ),
+        bottomNavigationBar: _buildBottomBar(),
       );
     });
   }
 
+  Widget? _buildBottomBar() {
+    Widget? button;
+
+    if (order.stage == OrderTabs.completed.value &&
+        controller.notReviewedItems.isNotEmpty) {
+      button = BaseButton(
+        text: 'Reviews',
+        onPressed: () {
+          for (final cartItem in controller.notReviewedItems) {
+            double? rating;
+            final reviewController = TextEditingController();
+            Get.defaultDialog(
+              title: 'Reviews',
+              titlePadding: const EdgeInsets.symmetric(vertical: 12),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+              content: ReviewsDialog(
+                onChangeRating: (value) {
+                  rating = value;
+                },
+                controller: reviewController,
+                onSubmit: () {
+                  if (rating == null) {
+                    return Notify.error('Please select rating');
+                  }
+                  if (reviewController.text.isEmpty) {
+                    return Notify.error('Please input review');
+                  }
+                  controller.submitReviews(
+                    cartItem.productVariant.id,
+                    reviewController.text,
+                    rating!,
+                  );
+                  Get.back();
+                },
+                cartItem: cartItem,
+              ),
+            );
+            reviewController.dispose();
+          }
+          controller.fetchOrder();
+        },
+      );
+    } else if (controller.order.value!.stage == OrderTabs.toPay.value) {
+      button = BaseButton(
+        text: 'Pay now',
+        onPressed: () async {
+          final paymentLink =
+              await controller.transactionRepository.create(controller.id);
+          if (paymentLink != null) {
+            final paymentUri = Uri.parse(paymentLink);
+            if (await canLaunchUrl(paymentUri)) {
+              launchUrl(paymentUri);
+            }
+          }
+        },
+      );
+    }
+    if (button == null) return null;
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: button,
+    );
+  }
+
   Widget _buildAddress() {
-    return InkWell(
-      onTap: () => Get.toNamed(Routes.address),
-      child: Container(
-        color: ColorConstants.lightGray,
-        padding: const EdgeInsets.symmetric(vertical: 4),
-        child: ListTile(
-          leading: Icon(Icons.location_on, color: ColorConstants.primary),
-          title: const BaseText(
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const BaseText(
             'Delivery Address',
-            fontSize: 15,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
-          subtitle: address != null
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    BaseText('${address!.fullName} | ${address!.phone}'),
-                    BaseText(address!.detail),
-                    BaseText(
-                      '${address!.ward}, ${address!.district}, ${address!.city}',
-                    ),
-                  ],
-                )
-              : const BaseText('Add new address'),
-        ),
+          const SizedBox(height: 8),
+          Container(
+              padding: const EdgeInsets.all(12),
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: ColorConstants.lightGray,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 4),
+                      BaseText(
+                          '${order.address!.fullName} | ${order.address!.phone}'),
+                      BaseText(order.address!.detail),
+                      BaseText(
+                        '${order.address!.ward}, ${order.address!.district}, ${order.address!.city}',
+                      ),
+                    ],
+                  )
+                ],
+              )),
+        ],
       ),
     );
   }
 
   Widget _buildOrderItemList() {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: cartItems!.length,
-      itemBuilder: (context, index) => _buildOrderItem(cartItems![index]),
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(10),
+          child: BaseText(
+            'Order Items',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          shrinkWrap: true,
+          itemCount: order.orderItems.length,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) => OrderItemCard(
+            cartItem: order.orderItems[index],
+            onlyContent: true,
+          ),
+          separatorBuilder: (context, index) => const SizedBox(height: 8),
+        ),
+      ],
     );
   }
 
   Widget _buildOrderItem(CartItem cartItem) {
-    final productType = cartItem.productType;
-    final product = productType.product;
+    final productVariant = cartItem.productVariant;
+    final product = productVariant.product;
     return ListTile(
-      leading: CachedNetworkImage(imageUrl: product!.image),
+      leading: Image.network(product!.image),
       title: BaseText(product.name, fontSize: 14),
       subtitle: Wrap(
         direction: Axis.vertical,
         children: [
           BaseText(
-            '${productType.color} - ${productType.size}',
+            '${productVariant.color} - ${productVariant.size}',
             fontSize: 12,
           ),
         ],
@@ -132,7 +219,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         spacing: 8,
         children: [
           BaseCurrencyText(
-            productType.price,
+            productVariant.price,
             color: ColorConstants.black,
             fontWeight: FontWeight.w400,
             fontSize: 14,
@@ -150,8 +237,12 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const BaseText('Bill Details', fontSize: 14),
-          const SizedBox(height: 4),
+          const BaseText(
+            'Order Summary',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.only(left: 4),
             child: Column(
@@ -161,7 +252,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                   children: [
                     const BaseText('Subtotal'),
                     BaseCurrencyText(
-                      controller.subtotal,
+                      controller.order.value!.subtotal,
                       color: ColorConstants.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
@@ -169,28 +260,28 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                   ],
                 ),
                 const SizedBox(height: 2),
-                if (controller.discount != null)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BaseText('Discount', color: ColorConstants.red),
-                      Wrap(
-                        spacing: 4,
-                        children: [
-                          BaseText(
-                            '-',
-                            color: ColorConstants.red,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          BaseCurrencyText(
-                            controller.discount!,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+                // if (controller.discount != null)
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       BaseText('Discount', color: ColorConstants.red),
+                //       Wrap(
+                //         spacing: 4,
+                //         children: [
+                //           BaseText(
+                //             '-',
+                //             color: ColorConstants.red,
+                //             fontWeight: FontWeight.w400,
+                //           ),
+                //           BaseCurrencyText(
+                //             controller.discount!,
+                //             fontSize: 14,
+                //             fontWeight: FontWeight.w400,
+                //           ),
+                //         ],
+                //       )
+                //     ],
+                //   ),
               ],
             ),
           ),
@@ -199,52 +290,48 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const BaseText('Amount', fontSize: 16),
-              if (controller.amount != null)
-                BaseCurrencyText(
-                  controller.amount!,
-                  color: ColorConstants.black,
-                ),
+              BaseCurrencyText(
+                controller.order.value!.amount,
+                color: ColorConstants.black,
+              ),
             ],
           ),
-          const SizedBox(height: 24),
         ],
       ),
     );
   }
 
-  Widget _buildDiscountTicket() {
-    return InkWell(
-      onTap: () => Get.toNamed(Routes.discountTicket),
-      child: Container(
-        color: ColorConstants.lightGray,
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const BaseText(
-              'Select discount ticket',
-              fontSize: 14,
-              color: Colors.black54,
-            ),
-            discountTicket != null
-                ? Container(
-                    decoration: BoxDecoration(
-                      color: ColorConstants.warning,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    child: BaseText(
-                      '-${discountTicket!.percent}%',
-                      fontSize: 14,
-                    ),
+  Widget _buildPaymentMethod() {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          BaseText(
+            'Payment',
+            color: ColorConstants.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          const SizedBox(height: 8),
+          BaseText(
+            'Payment method: ${controller.order.value!.paymentMethod.value}',
+            color: ColorConstants.black,
+          ),
+          const SizedBox(height: 4),
+          if (PaymentMethod.fromString(
+                  controller.order.value!.paymentMethod.value) !=
+              PaymentMethod.cod)
+            controller.order.value?.paidAt != null
+                ? BaseText(
+                    'Paid at: ${DateFormat('yyyy-MM-dd – kk:mm').format(controller.order.value!.paidAt!)}',
+                    color: ColorConstants.black,
                   )
-                : const Icon(
-                    Icons.chevron_right,
-                    color: Colors.black54,
+                : BaseText(
+                    'Not paid yet',
+                    color: ColorConstants.black,
                   ),
-          ],
-        ),
+        ],
       ),
     );
   }

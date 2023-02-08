@@ -10,18 +10,28 @@ class DiscountTicketController extends GetxController {
 
   var isLoading = false.obs;
   var discountTickets = Rx<List<DiscountTicket>>([]);
+  var savedDiscountTickets = Rx<List<DiscountTicket>>([]);
 
   @override
   void onInit() async {
     isLoading.value = true;
     super.onInit();
 
-    await fetchTickets();
+    await fetchNotSavedTickets();
     isLoading.value = false;
   }
 
-  Future<void> fetchTickets() async {
-    final response = await discountTicketRepository.getList();
+  Future<void> fetchNotSavedTickets() async {
+    final response =
+        await discountTicketRepository.getList(params: {'is_saved': false});
+    if (response != null) {
+      discountTickets.value = response.results;
+    }
+  }
+
+  Future<void> fetchSavedTickets() async {
+    final response =
+        await discountTicketRepository.getList(params: {'is_saved': true});
     if (response != null) {
       discountTickets.value = response.results;
     }

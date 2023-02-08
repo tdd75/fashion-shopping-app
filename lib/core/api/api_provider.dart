@@ -9,7 +9,7 @@ class ApiProvider extends GetConnect {
   void onInit() {
     httpClient
       ..baseUrl = dotenv.get('DOMAIN')
-      ..defaultContentType = "application/json"
+      ..defaultContentType = 'application/json'
       ..addAuthenticator(authInterceptor)
       ..addRequestModifier(requestInterceptor)
       ..addResponseModifier(responseInterceptor)

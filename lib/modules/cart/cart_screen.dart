@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fashion_shopping_app/core/routes/app_pages.dart';
-import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
-import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_quantity.dart';
 import 'package:fashion_shopping_app/modules/cart/cart_controller.dart';
@@ -14,6 +11,8 @@ import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_currency_text.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
+import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
+import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
 
 class CartScreen extends GetView<CartController> {
   const CartScreen({super.key});
@@ -47,8 +46,8 @@ class CartScreen extends GetView<CartController> {
   }
 
   Widget _buildCartItem(int index) {
-    final productType = cartItems[index].productType;
-    final product = productType.product!;
+    final productVariant = cartItems[index].productVariant;
+    final product = productVariant.product!;
     return Slidable(
       endActionPane: ActionPane(
         motion: const ScrollMotion(),
@@ -73,30 +72,22 @@ class CartScreen extends GetView<CartController> {
               onChecked: (value) =>
                   controller.toggleSelectCartItem(index, value!),
             ),
-            // CachedNetworkImage(
-            //   height: 56,
-            //   fit: BoxFit.fill,
-            //   imageUrl: product.image,
-            //   errorWidget: (context, url, error) => const Icon(Icons.error),
-            // ),
+            Image.network(product.image, height: 56),
           ],
         ),
-        title: BaseText(
-          product.name,
-          fontWeight: FontWeight.w500,
-        ),
+        title: BaseText(product.name, fontWeight: FontWeight.w500),
         subtitle: Wrap(
           direction: Axis.vertical,
           spacing: 4,
           children: [
-            Text('${productType.color} - ${productType.size}'),
-            BaseCurrencyText(productType.price, fontSize: 14),
+            Text('${productVariant.color} - ${productVariant.size}'),
+            BaseCurrencyText(productVariant.price, fontSize: 14),
           ],
         ),
         trailing: BaseInputQuantity(
           controller: controller.quantityControllers[index],
           onChanged: (value) => controller.updateQuantity(index, value),
-          maxValue: cartItems[index].productType.stocks,
+          maxValue: cartItems[index].productVariant.stocks,
         ),
       ),
     );
@@ -121,11 +112,10 @@ class CartScreen extends GetView<CartController> {
           ),
           const SizedBox(width: 12),
           BaseButton(
-            width: 128,
             text: 'Checkout',
             onPressed: () {
               Get.toNamed(
-                Routes.orderDetail,
+                Routes.checkout,
                 arguments: {
                   'cartItems': controller.selectedCartItems,
                   'totalPrice': controller.totalPrice,

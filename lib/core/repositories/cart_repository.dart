@@ -14,7 +14,7 @@ class CartRepository {
   Future<ListResponse<CartItem>?> getList(
       {Map<String, dynamic> params = const {}}) async {
     final query = {
-      'expand': 'product_type,product_type.product',
+      'expand': 'product_variant,product_variant.product',
       ...params,
     };
     final res =

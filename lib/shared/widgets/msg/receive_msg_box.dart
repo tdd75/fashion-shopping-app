@@ -1,36 +1,33 @@
 import 'dart:math' as math;
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/widgets/msg/msg_arrow_painter.dart';
-import 'package:fashion_shopping_app/shared/widgets/msg/msg_box.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 
 import 'package:flutter/material.dart';
 
-class ReceiveMsgBox extends MsgBox {
+class ReceiveMsgBox extends StatelessWidget {
   final String message;
-  const ReceiveMsgBox(
-      {Key? key, required this.message, required animationController})
-      : super(key: key, animationController: animationController);
+
+  const ReceiveMsgBox({super.key, required this.message});
 
   @override
-  Widget buildWidgets(BuildContext context) {
+  Widget build(BuildContext context) {
     final messageTextGroup = Flexible(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CachedNetworkImage(
-            width: 46,
-            height: 46,
-            fit: BoxFit.fill,
-            imageUrl: 'https://reqres.in/img/faces/2-image.jpg',
-            placeholder: (context, url) => const Image(
-              image: AssetImage('assets/images/icon_success.png'),
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
+          // CachedNetworkImage(
+          //   width: 46,
+          //   height: 46,
+          //   fit: BoxFit.fill,
+          //   imageUrl: 'https://reqres.in/img/faces/2-image.jpg',
+          //   placeholder: (context, url) => const Image(
+          //     image: AssetImage('assets/images/icon_success.png'),
+          //   ),
+          //   errorWidget: (context, url, error) => const Icon(Icons.error),
+          // ),
           const SizedBox(width: 10),
           Transform(
             alignment: Alignment.center,

@@ -1,8 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.tdd75.fashion_shopping">
     <application
-        tools:replace="android:label"
-        xmlns:tools="http://schemas.android.com/tools"
         android:label="fashion_shopping_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -28,33 +26,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <!-- Paypal payment -->
-        <activity
-            android:name="com.paypal.openid.RedirectUriReceiverActivity"
-            android:excludeFromRecents="true"
-            android:theme="@style/PYPLAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="paypalpay"
-                    android:scheme="com.tdd75.fashion.shopping" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.paypal.pyplcheckout.home.view.activities.PYPLInitiateCheckoutActivity"
-            android:theme="@style/AppFullScreenTheme">
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="paypalxo"
-                    android:scheme="com.tdd75.fashion.shopping" />
             </intent-filter>
         </activity>
 

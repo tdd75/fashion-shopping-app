@@ -31,8 +31,9 @@ class CartController extends GetxController {
 
   double get totalPrice {
     return selectedCartItems
-        .map((e) => e.productType.price * e.quantity)
-        .fold(0, (p, c) => p + c);
+        .map((e) => e.productVariant.price * e.quantity)
+        .fold<double>(0, (p, c) => p + c)
+        .toPrecision(2);
   }
 
   @override

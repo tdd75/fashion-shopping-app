@@ -1,3 +1,9 @@
+import 'package:fashion_shopping_app/modules/checkout/checkout_binding.dart';
+import 'package:fashion_shopping_app/modules/checkout/checkout_screen.dart';
+import 'package:fashion_shopping_app/modules/checkout/select_ticket_screen.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/favorite_tab/favorite_binding.dart';
+import 'package:fashion_shopping_app/modules/order/order_binding.dart';
+import 'package:fashion_shopping_app/modules/order/order_screen.dart';
 import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/modules/address/address_binding.dart';
@@ -52,6 +58,7 @@ class AppPages {
         HomeBinding(),
         InboxBinding(),
         AccountBinding(),
+        FavoriteBinding(),
         CartBinding(),
       ],
     ),
@@ -64,11 +71,6 @@ class AppPages {
       name: Routes.cart,
       page: () => const CartScreen(),
       binding: CartBinding(),
-    ),
-    GetPage(
-      name: Routes.orderDetail,
-      page: () => const OrderDetailScreen(),
-      binding: OrderDetailBinding(),
     ),
     GetPage(
       name: Routes.address,
@@ -84,6 +86,27 @@ class AppPages {
       name: Routes.discountTicket,
       page: () => const DiscountTicketScreen(),
       binding: DiscountTicketBinding(),
+    ),
+    GetPage(
+      name: Routes.order,
+      page: () => const OrderScreen(),
+      binding: OrderBinding(),
+    ),
+    GetPage(
+      name: Routes.orderDetail,
+      page: () => const OrderDetailScreen(),
+      binding: OrderDetailBinding(),
+    ),
+    GetPage(
+      name: Routes.checkout,
+      page: () => const CheckoutScreen(),
+      binding: CheckoutBinding(),
+      children: [
+        GetPage(
+          name: Routes.selectTicket,
+          page: () => const SelectTicketScreen(),
+        ),
+      ],
     ),
   ];
 }

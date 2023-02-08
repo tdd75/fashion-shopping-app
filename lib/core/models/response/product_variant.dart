@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:fashion_shopping_app/core/models/response/product_short.dart';
 
-class ProductType {
+class ProductVariant {
   final int id;
   final String color;
   final String size;
@@ -11,7 +11,7 @@ class ProductType {
   final double price;
   final ProductShort? product;
 
-  ProductType({
+  ProductVariant({
     required this.id,
     required this.color,
     required this.size,
@@ -31,8 +31,8 @@ class ProductType {
     };
   }
 
-  factory ProductType.fromMap(Map<String, dynamic> map) {
-    return ProductType(
+  factory ProductVariant.fromMap(Map<String, dynamic> map) {
+    return ProductVariant(
       id: map['id'] as int,
       color: map['color'] as String,
       size: map['size'] as String,
@@ -46,6 +46,6 @@ class ProductType {
 
   String toJson() => json.encode(toMap());
 
-  factory ProductType.fromJson(String source) =>
-      ProductType.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ProductVariant.fromJson(String source) =>
+      ProductVariant.fromMap(json.decode(source) as Map<String, dynamic>);
 }

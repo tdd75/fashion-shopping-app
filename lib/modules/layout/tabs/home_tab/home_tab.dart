@@ -1,5 +1,5 @@
 import 'package:fashion_shopping_app/shared/constants/color.dart';
-import 'package:fashion_shopping_app/core/models/common/query_request.dart';
+import 'package:fashion_shopping_app/core/models/common/query_param.dart';
 import 'package:fashion_shopping_app/shared/widgets/icon/base_badge_icon.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_price_range.dart';
@@ -11,7 +11,6 @@ import 'package:fashion_shopping_app/shared/widgets/rating_bar/base_rating_bar_i
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/home_tab/home_controller.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeTab extends GetView<HomeController> {
   const HomeTab({super.key});
@@ -42,8 +41,8 @@ class HomeTab extends GetView<HomeController> {
         ],
         body: RefreshIndicator(
           onRefresh: () async {
-            controller.query.value = QueryRequest();
-            await controller.fetchProducts();
+            controller.query.value = QueryParam();
+            await controller.fetchProducts(reset: true);
           },
           child: _buildGridView(),
         ),
@@ -69,7 +68,7 @@ class HomeTab extends GetView<HomeController> {
             suffixIcon: IconButton(
               icon: const Icon(Icons.camera_alt_outlined),
               color: ColorConstants.primary,
-              onPressed: () {},
+              onPressed: () => controller.loadMore(),
             ),
           ),
           onFieldSubmitted: (value) {
@@ -80,14 +79,17 @@ class HomeTab extends GetView<HomeController> {
   }
 
   Widget _buildGridView() {
-    return MasonryGridView.count(
-      crossAxisCount: 2,
-      itemCount: products.length,
-      itemBuilder: (BuildContext context, int index) =>
-          _buildCard(products[index]),
-      padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
-      crossAxisSpacing: 4,
-      mainAxisSpacing: 4,
+    return Obx(
+      () => MasonryGridView.count(
+        controller: controller.scrollController,
+        crossAxisCount: 2,
+        itemCount: products.length,
+        itemBuilder: (BuildContext context, int index) =>
+            _buildCard(products[index]),
+        padding: const EdgeInsets.symmetric(vertical: 36, horizontal: 20),
+        crossAxisSpacing: 4,
+        mainAxisSpacing: 4,
+      ),
     );
   }
 
@@ -98,18 +100,7 @@ class HomeTab extends GetView<HomeController> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SizedBox(
-              height: 100,
-              child: CachedNetworkImage(
-                fit: BoxFit.fitHeight,
-                imageUrl: product.image,
-                placeholder: (context, url) => const Padding(
-                  padding: EdgeInsets.all(32),
-                  child: Image(image: AssetImage('assets/icons/logo.png')),
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
+            SizedBox(height: 100, child: Image.network(product.image)),
             Container(
               height: 110,
               padding: const EdgeInsets.all(16),

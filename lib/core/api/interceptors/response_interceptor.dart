@@ -37,7 +37,6 @@ void handleErrorStatus(Response response) async {
         //     ? await Get.find<AuthRepository>()
         //         .refreshToken(prefs.getString(StorageKey.refresh)!)
         //     : null;
-
         if (token == null) {
           prefs
             ..remove(StorageKey.access)

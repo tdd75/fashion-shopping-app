@@ -1,8 +1,8 @@
 import 'package:fashion_shopping_app/shared/constants/storage_key.dart';
-import 'package:fashion_shopping_app/shared/constants/tabs.dart';
 import 'package:fashion_shopping_app/core/models/response/user.dart';
 import 'package:fashion_shopping_app/core/repositories/user_repository.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
+import 'package:fashion_shopping_app/shared/enums/layout_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,7 +13,7 @@ class AccountController extends GetxController {
   AccountController({required this.userRepository});
 
   var isLoading = false.obs;
-  var currentTab = Tabs.home.obs;
+  var currentTab = LayoutTabs.home.obs;
   var user = Rxn<User>();
   final searchController = TextEditingController();
 

@@ -173,7 +173,7 @@
 			name = Runner;
 			productName = Runner;
 			productReference = 33CC10ED2044A3C60003C045 /* fashion_shopping_app.app */;
-			productType = "com.apple.product-type.application";
+			productVariant = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 

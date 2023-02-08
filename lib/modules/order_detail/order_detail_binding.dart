@@ -5,8 +5,8 @@ class OrderDetailBinding implements Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => OrderDetailController(
-          orderRepository: Get.find(),
-          addressRepository: Get.find(),
-        ));
+        orderRepository: Get.find(),
+        transactionRepository: Get.find(),
+        reviewRepository: Get.find()));
   }
 }

@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
@@ -7,8 +8,6 @@ import 'package:get/get.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:fashion_shopping_app/modules/auth/auth_controller.dart';
 import 'package:fashion_shopping_app/modules/auth/widgets/oauth_buttons.dart';
-
-import '../../core/routes/app_pages.dart';
 
 class RegisterScreen extends StatelessWidget {
   final AuthController controller = Get.arguments;

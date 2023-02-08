@@ -1,6 +1,5 @@
+import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:flutter/material.dart';
-
-import '../constants/color.dart';
 
 class ThemeConfig {
   static ThemeData createTheme({
@@ -12,11 +11,11 @@ class ThemeConfig {
   }) {
     return ThemeData(
       primaryColor: primaryColor,
-      backgroundColor: backgroundColor,
       colorScheme: ColorScheme.fromSwatch().copyWith(
         brightness: brightness,
         primary: primaryColor,
         secondary: secondaryColor,
+        background: backgroundColor,
       ),
       appBarTheme: AppBarTheme(
         foregroundColor: primaryColor,
@@ -25,7 +24,6 @@ class ThemeConfig {
       ),
       fontFamily: 'Roboto',
       unselectedWidgetColor: ColorConstants.primary,
-      toggleableActiveColor: ColorConstants.primary,
     );
   }
 

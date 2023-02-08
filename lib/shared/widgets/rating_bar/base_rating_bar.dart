@@ -12,6 +12,7 @@ class BaseRatingBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RatingBar.builder(
+      allowHalfRating: true,
       initialRating: 0,
       minRating: 1,
       itemCount: 5,

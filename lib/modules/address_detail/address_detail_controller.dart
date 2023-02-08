@@ -1,9 +1,9 @@
 import 'package:fashion_shopping_app/core/models/request/address_create.dart';
+import 'package:fashion_shopping_app/core/repositories/address_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/core/models/response/address.dart';
-import 'package:fashion_shopping_app/core/repositories/address_repository.dart';
 
 class AddressDetailController extends GetxController {
   final AddressRepository addressRepository;

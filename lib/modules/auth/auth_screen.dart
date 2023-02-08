@@ -46,7 +46,7 @@ class AuthScreen extends GetView<AuthController> {
             'Let\'s start now!',
             textAlign: TextAlign.center,
             fontSize: 20,
-            color: Theme.of(context).textTheme.subtitle1!.color,
+            color: ColorConstants.secondary,
           ),
           const SizedBox(height: 50),
           BaseButton(
@@ -57,7 +57,7 @@ class AuthScreen extends GetView<AuthController> {
           ),
           const SizedBox(height: 16),
           BaseButton(
-            text: 'Sign Up',
+            text: 'Sign up',
             onPressed: () {
               Get.toNamed(Routes.auth + Routes.register, arguments: controller);
             },

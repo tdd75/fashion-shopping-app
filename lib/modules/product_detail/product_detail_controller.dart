@@ -1,7 +1,7 @@
 import 'package:fashion_shopping_app/core/models/request/cart_create.dart';
-import 'package:fashion_shopping_app/core/models/request/product_update_favorite.dart';
+import 'package:fashion_shopping_app/core/models/request/product_favorite_update.dart';
 import 'package:fashion_shopping_app/core/models/response/product.dart';
-import 'package:fashion_shopping_app/core/models/response/product_type.dart';
+import 'package:fashion_shopping_app/core/models/response/product_variant.dart';
 import 'package:fashion_shopping_app/core/repositories/cart_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/product_repository.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,43 +26,45 @@ class ProductDetailController extends GetxController {
 
   List<String> get allColors {
     if (product.value == null) return [];
-    return List<String>.from(product.value!.productTypes
-        .map((productType) => productType.color)
+    return List<String>.from(product.value!.productVariants
+        .map((productVariant) => productVariant.color)
         .toSet());
   }
 
   List<String> get allSizes {
     if (product.value == null) return [];
-    return List<String>.from(product.value!.productTypes
-        .map((productType) => productType.size)
+    return List<String>.from(product.value!.productVariants
+        .map((productVariant) => productVariant.size)
         .toSet());
   }
 
   List<String> get availableColors {
     if (product.value == null) return [];
-    return List<String>.from(product.value!.productTypes
-        .where((productType) =>
+    return List<String>.from(product.value!.productVariants
+        .where((productVariant) =>
             selectedSize.value == null ||
-            productType.size == selectedSize.value && productType.stocks > 0)
-        .map((productType) => productType.color)
+            productVariant.size == selectedSize.value &&
+                productVariant.stocks > 0)
+        .map((productVariant) => productVariant.color)
         .toSet());
   }
 
   List<String> get availableSizes {
     if (product.value == null) return [];
-    return List<String>.from(product.value!.productTypes
-        .where((productType) =>
+    return List<String>.from(product.value!.productVariants
+        .where((productVariant) =>
             selectedColor.value == null ||
-            productType.color == selectedColor.value && productType.stocks > 0)
-        .map((productType) => productType.size)
+            productVariant.color == selectedColor.value &&
+                productVariant.stocks > 0)
+        .map((productVariant) => productVariant.size)
         .toSet());
   }
 
-  ProductType? get selectedProductType {
+  ProductVariant? get selectedProductVariant {
     if (product.value == null) return null;
-    return product.value!.productTypes.firstWhereOrNull((productType) =>
-        productType.color == selectedColor.value &&
-        productType.size == selectedSize.value);
+    return product.value!.productVariants.firstWhereOrNull((productVariant) =>
+        productVariant.color == selectedColor.value &&
+        productVariant.size == selectedSize.value);
   }
 
   @override
@@ -93,11 +95,11 @@ class ProductDetailController extends GetxController {
   }
 
   void setDefaultType() {
-    final productTypes = product.value?.productTypes;
-    if (productTypes == null) return;
-    if (productTypes.length == 1) {
-      selectedColor.value = productTypes[0].color;
-      selectedSize.value = productTypes[0].size;
+    final productVariants = product.value?.productVariants;
+    if (productVariants == null) return;
+    if (productVariants.length == 1) {
+      selectedColor.value = productVariants[0].color;
+      selectedSize.value = productVariants[0].size;
     }
   }
 
@@ -112,7 +114,7 @@ class ProductDetailController extends GetxController {
     await cartRepository.create(
       CartCreate(
         quantity: int.tryParse(quantityController.text) ?? 1,
-        productTypeId: selectedProductType!.id,
+        productVariantId: selectedProductVariant!.id,
       ),
     );
   }
@@ -121,7 +123,7 @@ class ProductDetailController extends GetxController {
     final targetProduct = product.value!;
     await productRepository.updateFavorite(
       targetProduct.id,
-      ProductUpdateFavorite(isFavorite: !targetProduct.isFavorite),
+      ProductFavoriteUpdate(isFavorite: !targetProduct.isFavorite),
     );
     // update product in local
     final updatedProduct =

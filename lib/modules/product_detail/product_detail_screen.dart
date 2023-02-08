@@ -1,3 +1,6 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:fashion_shopping_app/core/models/response/product.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
@@ -11,9 +14,6 @@ import 'package:fashion_shopping_app/shared/widgets/text/base_currency_text.dart
 import 'package:fashion_shopping_app/shared/widgets/text/base_price_range.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:fashion_shopping_app/shared/widgets/tile/base_tile.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/widgets/icon/base_badge_icon.dart';
 import 'package:fashion_shopping_app/modules/product_detail/product_detail_controller.dart';
@@ -115,9 +115,9 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                 spacing: 12,
                 children: [
                   BaseRatingBarIndicator(product!.rating),
-                  const Text(
-                    '5 reviews',
-                    style: TextStyle(color: Color(0xFF979797)),
+                  Text(
+                    '${product!.reviewCount} reviews',
+                    style: const TextStyle(color: Color(0xFF979797)),
                   ),
                 ],
               ),
@@ -219,23 +219,23 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                           spacing: 4,
                           direction: Axis.vertical,
                           children: [
-                            ...(controller.selectedProductType == null
+                            ...(controller.selectedProductVariant == null
                                 ? [
                                     BasePriceRange(product!.priceRange),
                                     BaseText('Stock: ${product!.stocks}'),
                                   ]
                                 : [
-                                    BaseCurrencyText(
-                                        controller.selectedProductType!.price),
+                                    BaseCurrencyText(controller
+                                        .selectedProductVariant!.price),
                                     BaseText(
-                                        'Stock: ${controller.selectedProductType!.stocks}'),
+                                        'Stock: ${controller.selectedProductVariant!.stocks}'),
                                   ]),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  if (product!.productTypes.length > 1) ...[
+                  if (product!.productVariants.length > 1) ...[
                     Divider(color: ColorConstants.darkGray),
                     BaseText(
                       'Colors',
@@ -274,11 +274,11 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
                         'Quantity',
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: ColorConstants.secondary,
+                        color: ColorConstants.primary,
                       ),
                       BaseInputQuantity(
                         controller: controller.quantityController,
-                        maxValue: controller.selectedProductType?.stocks ??
+                        maxValue: controller.selectedProductVariant?.stocks ??
                             product!.stocks,
                       ),
                     ],

@@ -1,8 +1,8 @@
 import 'package:fashion_shopping_app/shared/constants/color.dart';
+import 'package:fashion_shopping_app/shared/enums/layout_tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:fashion_shopping_app/shared/constants/tabs.dart';
 import 'package:fashion_shopping_app/modules/layout/layout_controller.dart';
 
 class LayoutScreen extends GetView<LayoutController> {
@@ -65,15 +65,15 @@ class LayoutScreen extends GetView<LayoutController> {
     );
   }
 
-  Widget _buildContent(Tabs tab) {
+  Widget _buildContent(LayoutTabs tab) {
     switch (tab) {
-      case Tabs.home:
+      case LayoutTabs.home:
         return controller.homeTab;
-      case Tabs.inbox:
+      case LayoutTabs.inbox:
         return controller.inboxTab;
-      case Tabs.me:
+      case LayoutTabs.me:
         return controller.accountTab;
-      case Tabs.favorite:
+      case LayoutTabs.favorite:
         return controller.favoriteTab;
       default:
         return controller.homeTab;

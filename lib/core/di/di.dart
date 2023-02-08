@@ -8,6 +8,5 @@ class DenpendencyInjection {
   static Future<void> init() async {
     await Get.putAsync(() => DotenvService().init());
     await Get.putAsync(() => StorageService().init());
-    await Get.putAsync(() => PaypalService().init());
   }
 }

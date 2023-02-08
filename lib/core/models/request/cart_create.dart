@@ -3,24 +3,24 @@ import 'dart:convert';
 
 class CartCreate {
   final int quantity;
-  final int productTypeId;
+  final int productVariantId;
 
   CartCreate({
     required this.quantity,
-    required this.productTypeId,
+    required this.productVariantId,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'quantity': quantity,
-      'product_type': productTypeId,
+      'product_variant': productVariantId,
     };
   }
 
   factory CartCreate.fromMap(Map<String, dynamic> map) {
     return CartCreate(
       quantity: map['quantity'] as int,
-      productTypeId: map['product_type'] as int,
+      productVariantId: map['product_variant'] as int,
     );
   }
 

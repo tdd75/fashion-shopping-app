@@ -1,17 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fashion_shopping_app/shared/widgets/msg/msg_arrow_painter.dart';
-import 'package:fashion_shopping_app/shared/widgets/msg/msg_box.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:flutter/material.dart';
 
-class SendMsgBox extends MsgBox {
+class SendMsgBox extends StatelessWidget {
   final String message;
-  const SendMsgBox(
-      {Key? key, required this.message, required animationController})
-      : super(key: key, animationController: animationController);
+
+  const SendMsgBox({super.key, required this.message});
 
   @override
-  Widget buildWidgets(BuildContext context) {
+  Widget build(BuildContext context) {
     final messageTextGroup = Flexible(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -33,16 +30,16 @@ class SendMsgBox extends MsgBox {
           ),
           CustomPaint(painter: MsgArrowPainter(const Color(0XFF98E165))),
           const SizedBox(width: 10),
-          CachedNetworkImage(
-            width: 46,
-            height: 46,
-            fit: BoxFit.fill,
-            imageUrl: 'https://reqres.in/img/faces/1-image.jpg',
-            placeholder: (context, url) => const Image(
-              image: AssetImage('assets/images/icon_success.png'),
-            ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
-          ),
+          // CachedNetworkImage(
+          //   width: 46,
+          //   height: 46,
+          //   fit: BoxFit.fill,
+          //   imageUrl: 'https://reqres.in/img/faces/1-image.jpg',
+          //   placeholder: (context, url) => const Image(
+          //     image: AssetImage('assets/images/icon_success.png'),
+          //   ),
+          //   errorWidget: (context, url, error) => const Icon(Icons.error),
+          // ),
         ],
       ),
     );

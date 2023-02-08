@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class InboxBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => InboxController());
+    Get.lazyPut(() => InboxController(chatRepository: Get.find()));
   }
 }

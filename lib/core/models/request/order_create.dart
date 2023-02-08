@@ -1,31 +1,37 @@
 import 'dart:convert';
 
+import 'package:fashion_shopping_app/shared/enums/payment_method.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class OrderCreate {
-  final List<int> cartItems;
-  final int? address;
+  final List<int> orderItems;
+  final int address;
   final int? discountTicket;
+  final PaymentMethod paymentMethod;
 
   OrderCreate({
-    required this.cartItems,
-    this.address,
+    required this.orderItems,
+    required this.address,
     this.discountTicket,
+    required this.paymentMethod,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'cart_items': cartItems,
+      'order_items': orderItems,
       'address': address,
       'discount_ticket': discountTicket,
+      'payment_method': paymentMethod.value,
     };
   }
 
   factory OrderCreate.fromMap(Map<String, dynamic> map) {
     return OrderCreate(
-      cartItems: List<int>.from(map['cart_items']),
-      address: map['address'] != null ? map['address'] as int : null,
+      orderItems: List<int>.from(map['order_items']),
+      address: map['address'] as int,
       discountTicket:
           map['discount_ticket'] != null ? map['discount_ticket'] as int : null,
+      paymentMethod: PaymentMethod.fromString(map['payment_method'] as String)!,
     );
   }
 

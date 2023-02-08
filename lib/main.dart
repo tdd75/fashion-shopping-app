@@ -8,8 +8,7 @@ import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/theme/theme_data.dart';
 import 'package:fashion_shopping_app/shared/translations/app_translations.dart';
-
-import 'shared/widgets/loading/base_loading.dart';
+import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
