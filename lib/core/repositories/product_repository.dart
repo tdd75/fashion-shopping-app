@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:fashion_shopping_app/core/api/api_provider.dart';
 import 'package:fashion_shopping_app/core/models/request/product_favorite_update.dart';
 import 'package:fashion_shopping_app/core/models/response/product.dart';
+import 'package:fashion_shopping_app/core/models/response/product_filter.dart';
 import 'package:fashion_shopping_app/shared/helpers/query_string.dart';
 import 'package:fashion_shopping_app/core/models/common/list_response.dart';
 import 'package:fashion_shopping_app/core/models/response/product_short.dart';
@@ -24,6 +26,21 @@ class ProductRepository {
         : null;
   }
 
+  Future<ListResponse<ProductShort>?> searchByImage(String encodedImage) async {
+    final res = await apiProvider.post(
+        '/products/search-image/', json.encode({'image': encodedImage}));
+    return res.status.isOk
+        ? ListResponse<ProductShort>.fromMap(res.body, ProductShort.fromMap)
+        : null;
+  }
+
+  Future<ListResponse<ProductShort>?> getRelatedProducts(int id) async {
+    final res = await apiProvider.get('/products/$id/related-products/');
+    return res.status.isOk
+        ? ListResponse<ProductShort>.fromMap(res.body, ProductShort.fromMap)
+        : null;
+  }
+
   Future<Product?> get(int id) async {
     const query = {'expand': 'variants,variants.product'};
     final res = await apiProvider.get('/products/$id/',
@@ -35,5 +52,10 @@ class ProductRepository {
     final res =
         await apiProvider.post('/products/$id/update-favorite/', data.toJson());
     return res.status.isOk;
+  }
+
+  Future<ProductFilter?> getFilter() async {
+    final res = await apiProvider.get('/products/product-filter/');
+    return res.status.isOk ? ProductFilter.fromMap(res.body) : null;
   }
 }

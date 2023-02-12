@@ -3,7 +3,9 @@ import 'dart:convert';
 
 import 'package:fashion_shopping_app/core/api/api_provider.dart';
 import 'package:fashion_shopping_app/core/models/request/login.dart';
+import 'package:fashion_shopping_app/core/models/request/recover_password.dart';
 import 'package:fashion_shopping_app/core/models/request/register.dart';
+import 'package:fashion_shopping_app/core/models/request/verify_code.dart';
 import 'package:fashion_shopping_app/core/models/response/token.dart';
 import 'package:get/get.dart';
 
@@ -42,5 +44,24 @@ class AuthRepository {
       json.encode({'refresh': refresh}),
     );
     return res.status.isOk ? res.body['access'] : null;
+  }
+
+  Future<bool> forgotPassword(String email) async {
+    final res = await apiProvider.post(
+      '/auth/forgot-password/',
+      json.encode({'email': email}),
+    );
+    return res.status.isOk;
+  }
+
+  Future<bool> recoverPassword(RecoverPassword data) async {
+    final res =
+        await apiProvider.post('/auth/recover-password/', data.toJson());
+    return res.status.isOk;
+  }
+
+  Future<bool> verifyCode(VerifyCode data) async {
+    final res = await apiProvider.post('/auth/verify-code/', data.toJson());
+    return res.status.isOk;
   }
 }

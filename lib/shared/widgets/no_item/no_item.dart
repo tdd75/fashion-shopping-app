@@ -10,9 +10,9 @@ class NoItem extends StatelessWidget {
         children: [
           Container(
             constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: Column(
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 Icon(Icons.search, size: 32),
                 Text('No items found'),
               ],

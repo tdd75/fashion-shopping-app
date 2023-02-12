@@ -1,4 +1,5 @@
 import 'package:fashion_shopping_app/core/models/response/product_short.dart';
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/favorite_tab/favorite_controller.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
@@ -29,13 +30,19 @@ class FavoriteTab extends GetView<FavoriteController> {
                 itemCount: favoritedProducts.length,
                 itemBuilder: (context, index) {
                   final product = favoritedProducts[index];
-                  return ListTile(
-                    leading: Image.network(product.image),
-                    title: BaseText(product.name),
-                    subtitle: BasePriceRange(product.priceRange),
-                    trailing: InkWell(
-                      onTap: () => controller.unfavorite(product.id),
-                      child: const Icon(Icons.favorite, color: Colors.red),
+                  return InkWell(
+                    onTap: () => Get.toNamed(
+                      Routes.productDetail,
+                      arguments: product.id,
+                    ),
+                    child: ListTile(
+                      leading: Image.network(product.image),
+                      title: BaseText(product.name),
+                      subtitle: BasePriceRange(product.priceRange),
+                      trailing: GestureDetector(
+                        onTap: () => controller.unfavorite(product.id),
+                        child: const Icon(Icons.favorite, color: Colors.red),
+                      ),
                     ),
                   );
                 },

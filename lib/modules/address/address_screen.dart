@@ -2,6 +2,7 @@ import 'package:fashion_shopping_app/core/models/response/address.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/address/address_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
+import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,26 @@ class AddressScreen extends GetView<AddressController> {
   }
 
   Widget _buildAddressList() {
+    if (addresses!.isEmpty) {
+      return Center(
+        child: Column(
+          children: [
+            const SizedBox(height: 32),
+            const Icon(Icons.location_pin, size: 64),
+            const SizedBox(height: 16),
+            const BaseText('No address found'),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: 220,
+              child: BaseButton(
+                text: 'Add new address',
+                onPressed: () => Get.toNamed(Routes.addressDetail),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     return ListView.builder(
       itemCount: addresses!.length,
       itemBuilder: (context, index) {

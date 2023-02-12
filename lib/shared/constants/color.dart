@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 abstract class ColorConstants {
   static Color primary = const Color(0xFF44B78B);
-  static Color secondary = Colors.greenAccent;
+  static Color secondary = const Color(0xFF015393);
   static Color tip = const Color(0xFFB6B6B6);
   static Color shadow = const Color(0xFFE5F5FF);
   static Color unselected = const Color(0xFFDADCDD);

@@ -8,7 +8,7 @@ class Review {
   final int id;
   final ProductVariant variant;
   final String content;
-  final String rating;
+  final double rating;
   final UserShort owner;
 
   Review({
@@ -34,7 +34,7 @@ class Review {
       id: map['id'] as int,
       variant: ProductVariant.fromMap(map['variant'] as Map<String, dynamic>),
       content: map['content'] as String,
-      rating: map['rating'] as String,
+      rating: map['rating'] as double,
       owner: UserShort.fromMap(map['owner'] as Map<String, dynamic>),
     );
   }

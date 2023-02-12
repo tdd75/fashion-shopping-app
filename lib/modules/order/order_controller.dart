@@ -3,7 +3,6 @@ import 'package:fashion_shopping_app/core/repositories/order_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/transaction_repository.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class OrderController extends GetxController

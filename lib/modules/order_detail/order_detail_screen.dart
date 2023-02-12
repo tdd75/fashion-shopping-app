@@ -1,11 +1,10 @@
-import 'package:fashion_shopping_app/core/models/response/address.dart';
-import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
 import 'package:fashion_shopping_app/core/models/response/order.dart';
 import 'package:fashion_shopping_app/modules/order_detail/order_detail_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
 import 'package:fashion_shopping_app/shared/enums/payment_method.dart';
 import 'package:fashion_shopping_app/shared/helpers/notify.dart';
+import 'package:fashion_shopping_app/shared/widgets/address/address_card.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/order/order_item.dart';
@@ -44,7 +43,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                       fontWeight: FontWeight.w500,
                     ),
                     BaseText(
-                      controller.order.value!.code,
+                      '#${controller.order.value!.code}',
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                       color: ColorConstants.primary,
@@ -52,7 +51,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                   ],
                 ),
               ),
-              _buildAddress(),
+              AddressCard(address: order.address!),
               _buildOrderItemList(),
               const SizedBox(height: 24),
               _buildOrderDetails(),
@@ -73,11 +72,11 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
         controller.notReviewedItems.isNotEmpty) {
       button = BaseButton(
         text: 'Reviews',
-        onPressed: () {
+        onPressed: () async {
           for (final cartItem in controller.notReviewedItems) {
             double? rating;
             final reviewController = TextEditingController();
-            Get.defaultDialog(
+            await Get.defaultDialog(
               title: 'Reviews',
               titlePadding: const EdgeInsets.symmetric(vertical: 12),
               contentPadding: const EdgeInsets.symmetric(horizontal: 24),
@@ -103,9 +102,8 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                 cartItem: cartItem,
               ),
             );
-            reviewController.dispose();
           }
-          controller.fetchOrder();
+          await controller.fetchOrder();
         },
       );
     } else if (controller.order.value!.stage == OrderTabs.toPay.value) {
@@ -127,47 +125,6 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
     return Padding(
       padding: const EdgeInsets.all(12),
       child: button,
-    );
-  }
-
-  Widget _buildAddress() {
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const BaseText(
-            'Delivery Address',
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-          ),
-          const SizedBox(height: 8),
-          Container(
-              padding: const EdgeInsets.all(12),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: ColorConstants.lightGray,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      BaseText(
-                          '${order.address!.fullName} | ${order.address!.phone}'),
-                      BaseText(order.address!.detail),
-                      BaseText(
-                        '${order.address!.ward}, ${order.address!.district}, ${order.address!.city}',
-                      ),
-                    ],
-                  )
-                ],
-              )),
-        ],
-      ),
     );
   }
 
@@ -195,38 +152,6 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
           separatorBuilder: (context, index) => const SizedBox(height: 8),
         ),
       ],
-    );
-  }
-
-  Widget _buildOrderItem(CartItem cartItem) {
-    final productVariant = cartItem.productVariant;
-    final product = productVariant.product;
-    return ListTile(
-      leading: Image.network(product!.image),
-      title: BaseText(product.name, fontSize: 14),
-      subtitle: Wrap(
-        direction: Axis.vertical,
-        children: [
-          BaseText(
-            '${productVariant.color} - ${productVariant.size}',
-            fontSize: 12,
-          ),
-        ],
-      ),
-      trailing: Wrap(
-        crossAxisAlignment: WrapCrossAlignment.end,
-        direction: Axis.vertical,
-        spacing: 8,
-        children: [
-          BaseCurrencyText(
-            productVariant.price,
-            color: ColorConstants.black,
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-          ),
-          BaseText('x${cartItem.quantity}', fontSize: 12),
-        ],
-      ),
     );
   }
 

@@ -1,28 +1,76 @@
 import 'package:fashion_shopping_app/core/models/request/cart_create.dart';
 import 'package:fashion_shopping_app/core/models/request/product_favorite_update.dart';
 import 'package:fashion_shopping_app/core/models/response/product.dart';
+import 'package:fashion_shopping_app/core/models/response/product_short.dart';
 import 'package:fashion_shopping_app/core/models/response/product_variant.dart';
+import 'package:fashion_shopping_app/core/models/response/review.dart';
 import 'package:fashion_shopping_app/core/repositories/cart_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/product_repository.dart';
+import 'package:fashion_shopping_app/core/repositories/review_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class ProductDetailController extends GetxController {
   final ProductRepository productRepository;
   final CartRepository cartRepository;
+  final ReviewRepository reviewRepository;
 
   ProductDetailController({
     required this.productRepository,
     required this.cartRepository,
+    required this.reviewRepository,
   });
 
   var isLoading = false.obs;
   var product = Rxn<Product>();
+  var newestReviews = Rx<List<Review>>([]);
+  var relatedProducts = Rx<List<ProductShort>>([]);
+
+  var reviews = Rx<List<Review>>([]);
   var selectedColor = Rxn<String>();
   var selectedSize = Rxn<String>();
   var quantityController = TextEditingController(text: '1');
 
+  // Arguments
   late int id;
+
+  // Review list
+  final scrollController = ScrollController();
+  var query = <String, dynamic>{
+    'limit': 10,
+    'offset': 0,
+  };
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await loadData();
+  }
+
+  Future<void> loadData() async {
+    isLoading.value = true;
+    id = Get.arguments;
+    scrollController.addListener(_triggerloadMore);
+    await fetchProduct();
+    await fetchNewestReviews();
+    await fetchRelatedProducts();
+    setDefaultType();
+    isLoading.value = false;
+  }
+
+  @override
+  void onClose() {
+    scrollController.removeListener(_triggerloadMore);
+    super.onClose();
+  }
+
+  Future<void> _triggerloadMore() async {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      query['offset'] = query['offset']! + query['limit']!;
+      await fetchReviews();
+    }
+  }
 
   List<String> get allColors {
     if (product.value == null) return [];
@@ -67,33 +115,6 @@ class ProductDetailController extends GetxController {
         productVariant.size == selectedSize.value);
   }
 
-  @override
-  void onInit() async {
-    isLoading.value = true;
-    super.onInit();
-
-    id = Get.arguments;
-    await fetchProduct();
-    setDefaultType();
-    isLoading.value = false;
-  }
-
-  void toggleColor(String color) {
-    if (selectedColor.value == color) {
-      selectedColor.value = null;
-    } else {
-      selectedColor.value = color;
-    }
-  }
-
-  void toggleSize(String size) {
-    if (selectedSize.value == size) {
-      selectedSize.value = null;
-    } else {
-      selectedSize.value = size;
-    }
-  }
-
   void setDefaultType() {
     final productVariants = product.value?.productVariants;
     if (productVariants == null) return;
@@ -107,6 +128,27 @@ class ProductDetailController extends GetxController {
     final response = await productRepository.get(id);
     if (response != null) {
       product.value = response;
+    }
+  }
+
+  Future<void> fetchNewestReviews() async {
+    final response = await reviewRepository.getList(id, params: {'limit': 3});
+    if (response != null) {
+      newestReviews.value = response.results;
+    }
+  }
+
+  Future<void> fetchReviews() async {
+    final response = await reviewRepository.getList(id, params: query);
+    if (response != null) {
+      reviews.value = response.results;
+    }
+  }
+
+  Future<void> fetchRelatedProducts() async {
+    final response = await productRepository.getRelatedProducts(id);
+    if (response != null) {
+      relatedProducts.value = response.results;
     }
   }
 

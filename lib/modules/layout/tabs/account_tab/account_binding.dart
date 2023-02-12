@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class AccountBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => AccountController(userRepository: Get.find()));
+    Get.lazyPut(() => AccountController(
+        userRepository: Get.find(), addressRepository: Get.find()));
   }
 }

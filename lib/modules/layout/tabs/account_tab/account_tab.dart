@@ -1,6 +1,5 @@
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/account_tab/account_controller.dart';
-import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,17 +11,14 @@ class AccountTab extends GetView<AccountController> {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.isLoading.value) return const BaseLoading();
-      return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const BaseText('Account'),
-          centerTitle: true,
-        ),
-        body: _buildButtonList(),
-      );
-    });
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: const BaseText('Account'),
+        centerTitle: true,
+      ),
+      body: _buildButtonList(),
+    );
   }
 
   Widget _buildButtonList() {
@@ -31,23 +27,28 @@ class AccountTab extends GetView<AccountController> {
       children: [
         _buildActionsCard(),
         const SizedBox(height: 24),
-        _buildButton(const Icon(Icons.account_circle_outlined),
-            'Personal Information', () {}),
+        _buildButton(
+          'Personal Information',
+          const Icon(Icons.account_circle_outlined),
+          () => Get.toNamed(Routes.info),
+        ),
         const SizedBox(height: 24),
-        _buildButton(const Icon(Icons.privacy_tip_outlined), 'Privacy', () {}),
+        _buildButton('Privacy', const Icon(Icons.privacy_tip_outlined), () {}),
         const SizedBox(height: 24),
-        _buildButton(const Icon(Icons.lock_outlined), 'Change password', () {}),
+        _buildButton('Change password', const Icon(Icons.lock_outlined), () {}),
         const SizedBox(height: 24),
-        _buildButton(const Icon(Icons.settings_outlined), 'Settings', () {}),
+        _buildButton('Settings', const Icon(Icons.settings_outlined), () {}),
         const SizedBox(height: 24),
-        _buildButton(const Icon(Icons.logout_outlined), 'Logout', () {
-          controller.logout();
-        }),
+        _buildButton(
+          'Logout',
+          const Icon(Icons.logout_outlined),
+          () => controller.logout(),
+        ),
       ],
     );
   }
 
-  Widget _buildButton(Widget icon, String text, Function() onPressed) {
+  Widget _buildButton(String text, Widget icon, Function() onPressed) {
     return SizedBox(
       width: double.infinity,
       child: Material(
@@ -106,7 +107,7 @@ class AccountTab extends GetView<AccountController> {
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () => Get.toNamed(Routes.discountTicket),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

@@ -1,4 +1,3 @@
-import 'package:fashion_shopping_app/core/models/response/order.dart';
 import 'package:fashion_shopping_app/core/models/response/order_short.dart';
 import 'package:fashion_shopping_app/core/repositories/address_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/discount_ticket_repository.dart';

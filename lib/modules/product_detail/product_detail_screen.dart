@@ -1,3 +1,7 @@
+import 'package:fashion_shopping_app/core/models/response/product_short.dart';
+import 'package:fashion_shopping_app/modules/product_detail/review_list_screen.dart';
+import 'package:fashion_shopping_app/shared/widgets/reviews/review_item.dart';
+import 'package:fashion_shopping_app/shared/widgets/variant_select/variant_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,86 +22,100 @@ import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/widgets/icon/base_badge_icon.dart';
 import 'package:fashion_shopping_app/modules/product_detail/product_detail_controller.dart';
 
-class ProductDetailScreen extends GetView<ProductDetailController> {
+class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key});
+
+  @override
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
+}
+
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  late ProductDetailController controller;
 
   Product? get product => controller.product.value;
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.isLoading.value) return const BaseLoading();
-      if (product == null) return const NoItem();
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(product!.name),
-          centerTitle: true,
-          actions: [
-            BaseBadgeIcon(
-              number: 1,
-              icon: Icon(
-                Icons.shopping_cart_outlined,
-                color: ColorConstants.black,
-              ),
-              onPressed: () => Get.toNamed(Routes.cart),
-            ),
-          ],
-        ),
-        body: _buildBody(),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          child: Row(
-            children: [
-              Expanded(
-                child: BaseButton(
-                  text: 'Place order',
-                  onPressed: _showAddToCartPanel,
-                ),
-              ),
-              const SizedBox(width: 8),
-              IconButton(
+    return GetBuilder<ProductDetailController>(builder: (controller) {
+      this.controller = controller;
+      return Obx(() {
+        if (controller.isLoading.value) return const BaseLoading();
+        if (product == null) return const NoItem();
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(product!.name),
+            centerTitle: true,
+            actions: [
+              BaseBadgeIcon(
+                number: 1,
                 icon: Icon(
-                  product!.isFavorite ? Icons.favorite : Icons.favorite_border,
-                  size: 32,
-                  color: ColorConstants.red,
+                  Icons.shopping_cart_outlined,
+                  color: ColorConstants.black,
                 ),
-                onPressed: () => controller.updateFavorite(),
+                onPressed: () => Get.toNamed(Routes.cart),
               ),
             ],
           ),
-        ),
-      );
+          body: CustomScrollView(
+            slivers: [
+              _buildAppBar(),
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  [_buildProductInfo()],
+                ),
+              ),
+            ],
+          ),
+          bottomNavigationBar: _buildBottomBar(),
+        );
+      });
     });
   }
 
-  Widget _buildBody() {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          iconTheme: IconThemeData(
-            color: Colors.grey[750],
+  Widget _buildAppBar() {
+    return SliverAppBar(
+      iconTheme: IconThemeData(
+        color: Colors.grey[750],
+      ),
+      automaticallyImplyLeading: false,
+      expandedHeight: 300,
+      flexibleSpace: FlexibleSpaceBar(
+        background: Container(
+          color: ColorConstants.white,
+          child: BaseCarousel(
+            items: [
+              PreviewImage(product!.image),
+              PreviewImage(product!.image),
+              PreviewImage(product!.image),
+            ],
           ),
-          automaticallyImplyLeading: false,
-          expandedHeight: 300,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Container(
-              color: ColorConstants.white,
-              child: BaseCarousel(
-                items: [
-                  PreviewImage(product!.image),
-                  PreviewImage(product!.image),
-                  PreviewImage(product!.image),
-                ],
-              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      child: Row(
+        children: [
+          Expanded(
+            child: BaseButton(
+              text: 'Place order',
+              onPressed: _showAddToCartPanel,
             ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate(
-            [_buildProductInfo()],
+          const SizedBox(width: 8),
+          IconButton(
+            icon: Icon(
+              product!.isFavorite ? Icons.favorite : Icons.favorite_border,
+              size: 32,
+              color: ColorConstants.red,
+            ),
+            onPressed: () => controller.updateFavorite(),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -140,6 +158,7 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
           BasePriceRange(product!.priceRange, fontSize: 16),
           const SizedBox(height: 12),
           BaseTile(
+            initiallyExpanded: true,
             title: const BaseText(
               'Description',
               fontSize: 16,
@@ -150,156 +169,245 @@ class ProductDetailScreen extends GetView<ProductDetailController> {
             ],
           ),
           const SizedBox(height: 12),
+          _buildReviewList(),
+          const SizedBox(height: 12),
+          _buildRelatedProducts(),
         ],
       ),
     );
   }
 
-  Widget _buildTypeSelect(
-    List<String> allOptions,
-    List<String> availableOptions,
-    String? selected,
-    Function(String value) onSelected,
-  ) {
-    return Wrap(
-      spacing: 20,
-      runSpacing: 12,
-      children: List<Widget>.from(allOptions.map(
-        (option) {
-          final isSelected = option == selected;
-          final isAvailable = availableOptions.contains(option);
-          return GestureDetector(
-            onTap: () {
-              if (isAvailable) onSelected(option);
-            },
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minWidth: 50),
-              child: Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: isAvailable
-                      ? ColorConstants.lightGray
-                      : isSelected
-                          ? ColorConstants.white
-                          : ColorConstants.darkGray,
-                  border: Border.all(
-                    width: 1.5,
-                    color: isSelected
-                        ? ColorConstants.primary
-                        : ColorConstants.transparent,
+  Widget _buildReviewList() {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const BaseText(
+            'Reviews',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          const SizedBox(height: 12),
+          controller.newestReviews.value.isEmpty
+              ? Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: ColorConstants.lightGray,
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  borderRadius: BorderRadius.circular(4),
+                  child: const BaseText(
+                    'No reviews yet for this product',
+                    textAlign: TextAlign.center,
+                  ))
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const BaseText(
+                      'Reviews',
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.fetchReviews();
+                        Get.to(() => const ReviewListScreen());
+                      },
+                      child: BaseText(
+                        'See all',
+                        color: ColorConstants.primary,
+                      ),
+                    ),
+                  ],
                 ),
-                child: Text(option, textAlign: TextAlign.center),
-              ),
-            ),
-          );
-        },
-      )),
+          const SizedBox(height: 12),
+          Column(
+            children: [
+              for (final review in controller.newestReviews.value)
+                ReviewItem(review: review),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   void _showAddToCartPanel() {
     Get.bottomSheet(
-      Obx(
-        () => Wrap(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 96,
-                    child: Row(
-                      children: [
-                        PreviewImage(product!.image),
-                        const SizedBox(width: 12),
-                        Wrap(
-                          spacing: 4,
-                          direction: Axis.vertical,
-                          children: [
-                            ...(controller.selectedProductVariant == null
-                                ? [
-                                    BasePriceRange(product!.priceRange),
-                                    BaseText('Stock: ${product!.stocks}'),
-                                  ]
-                                : [
-                                    BaseCurrencyText(controller
-                                        .selectedProductVariant!.price),
-                                    BaseText(
-                                        'Stock: ${controller.selectedProductVariant!.stocks}'),
-                                  ]),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  if (product!.productVariants.length > 1) ...[
-                    Divider(color: ColorConstants.darkGray),
-                    BaseText(
-                      'Colors',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: ColorConstants.secondary,
-                    ),
-                    const SizedBox(height: 4),
-                    _buildTypeSelect(
-                      controller.allColors,
-                      controller.availableColors,
-                      controller.selectedColor.value,
-                      controller.toggleColor,
-                    ),
-                    const SizedBox(height: 8),
-                    BaseText(
-                      'Sizes',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: ColorConstants.secondary,
-                    ),
-                    const SizedBox(height: 4),
-                    _buildTypeSelect(
-                      controller.allSizes,
-                      controller.availableSizes,
-                      controller.selectedSize.value,
-                      controller.toggleSize,
-                    ),
-                    const SizedBox(height: 4),
-                  ],
-                  Divider(color: ColorConstants.darkGray),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      BaseText(
-                        'Quantity',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: ColorConstants.primary,
-                      ),
-                      BaseInputQuantity(
-                        controller: controller.quantityController,
-                        maxValue: controller.selectedProductVariant?.stocks ??
-                            product!.stocks,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  BaseButton(
-                      text: 'Add to cart',
-                      onPressed: () {
-                        controller.addToCart();
-                        Get.back();
-                      }),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      Obx(() => Wrap(children: [_buildCartPanel()])),
       backgroundColor: ColorConstants.white,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
+      ),
+    );
+  }
+
+  Widget _buildCartPanel() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(
+            height: 96,
+            child: Row(
+              children: [
+                PreviewImage(product!.image),
+                const SizedBox(width: 12),
+                Wrap(
+                  spacing: 4,
+                  direction: Axis.vertical,
+                  children: [
+                    ...(controller.selectedProductVariant == null
+                        ? [
+                            BasePriceRange(product!.priceRange),
+                            BaseText('Stock: ${product!.stocks}'),
+                          ]
+                        : [
+                            BaseCurrencyText(
+                                controller.selectedProductVariant!.price),
+                            BaseText(
+                                'Stock: ${controller.selectedProductVariant!.stocks}'),
+                          ]),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          ...[
+            Divider(color: ColorConstants.darkGray),
+            BaseText(
+              'Colors',
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: ColorConstants.secondary,
+            ),
+            const SizedBox(height: 4),
+            VariantSelect(
+              allOptions: controller.allColors
+                  .map((e) => VariantOption(label: e, value: e))
+                  .toList(),
+              availableOptions: controller.availableColors
+                  .map((e) => VariantOption(label: e, value: e))
+                  .toList(),
+              selected: controller.selectedColor.value,
+              onSelected: (value) => controller.selectedColor.value = value,
+            ),
+            const SizedBox(height: 8),
+            BaseText(
+              'Sizes',
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: ColorConstants.secondary,
+            ),
+            const SizedBox(height: 4),
+            VariantSelect(
+              allOptions: controller.allSizes
+                  .map((e) => VariantOption(label: e, value: e))
+                  .toList(),
+              availableOptions: controller.availableSizes
+                  .map((e) => VariantOption(label: e, value: e))
+                  .toList(),
+              selected: controller.selectedSize.value,
+              onSelected: (value) => controller.selectedSize.value = value,
+            ),
+            const SizedBox(height: 4),
+          ],
+          Divider(color: ColorConstants.darkGray),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BaseText(
+                'Quantity',
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: ColorConstants.primary,
+              ),
+              BaseInputQuantity(
+                controller: controller.quantityController,
+                maxValue: controller.selectedProductVariant?.stocks ??
+                    product!.stocks,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          BaseButton(
+              text: 'Add to cart',
+              onPressed: () {
+                controller.addToCart();
+                Get.back();
+              }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRelatedProducts() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const BaseText(
+          'Related products',
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        const SizedBox(height: 12),
+        SizedBox(
+          height: 200,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.relatedProducts.value.length,
+            itemBuilder: (context, index) {
+              final product = controller.relatedProducts.value[index];
+              return _buildProductItem(product);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildProductItem(ProductShort product) {
+    return GestureDetector(
+      onTap: () {
+        Get.toNamed(
+          Routes.productDetail,
+          arguments: product.id,
+          preventDuplicates: false,
+        );
+      },
+      child: SizedBox(
+        width: 160,
+        child: Card(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: SizedBox(
+                  height: 120,
+                  child: Image.network(product.image, fit: BoxFit.fitHeight),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    BaseText(
+                      product.name,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    const SizedBox(height: 4),
+                    BasePriceRange(product.priceRange),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -52,14 +52,14 @@ class AuthScreen extends GetView<AuthController> {
           BaseButton(
             text: 'Login',
             onPressed: () {
-              Get.toNamed(Routes.auth + Routes.login, arguments: controller);
+              Get.toNamed(Routes.auth + Routes.login);
             },
           ),
           const SizedBox(height: 16),
           BaseButton(
             text: 'Sign up',
             onPressed: () {
-              Get.toNamed(Routes.auth + Routes.register, arguments: controller);
+              Get.toNamed(Routes.auth + Routes.register);
             },
           ),
           const SizedBox(height: 62),

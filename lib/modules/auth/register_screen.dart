@@ -9,10 +9,8 @@ import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:fashion_shopping_app/modules/auth/auth_controller.dart';
 import 'package:fashion_shopping_app/modules/auth/widgets/oauth_buttons.dart';
 
-class RegisterScreen extends StatelessWidget {
-  final AuthController controller = Get.arguments;
-
-  RegisterScreen({super.key});
+class RegisterScreen extends GetView<AuthController> {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +79,7 @@ class RegisterScreen extends StatelessWidget {
                   onChecked: (val) {
                     controller.registerTermsChecked.value = val!;
                   },
+                  crossAxisAlignment: CrossAxisAlignment.start,
                 )),
             const SizedBox(height: 16),
             BaseButton(

@@ -30,16 +30,6 @@ class SendMsgBox extends StatelessWidget {
           ),
           CustomPaint(painter: MsgArrowPainter(const Color(0XFF98E165))),
           const SizedBox(width: 10),
-          // CachedNetworkImage(
-          //   width: 46,
-          //   height: 46,
-          //   fit: BoxFit.fill,
-          //   imageUrl: 'https://reqres.in/img/faces/1-image.jpg',
-          //   placeholder: (context, url) => const Image(
-          //     image: AssetImage('assets/images/icon_success.png'),
-          //   ),
-          //   errorWidget: (context, url, error) => const Icon(Icons.error),
-          // ),
         ],
       ),
     );

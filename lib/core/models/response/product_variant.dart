@@ -38,7 +38,7 @@ class ProductVariant {
       size: map['size'] as String,
       stocks: map['stocks'] as int,
       price: map['price'] as double,
-      product: map['product'] != null
+      product: map['product'] is Map
           ? ProductShort.fromMap(map['product'] as Map<String, dynamic>)
           : null,
     );

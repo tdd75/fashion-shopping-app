@@ -1,4 +1,5 @@
 import 'package:fashion_shopping_app/core/models/request/message_create.dart';
+import 'package:fashion_shopping_app/core/models/response/admin_info.dart';
 import 'package:fashion_shopping_app/core/models/response/message.dart';
 import 'package:fashion_shopping_app/core/repositories/chat_repository.dart';
 import 'package:flutter/material.dart';
@@ -15,29 +16,35 @@ class InboxController extends GetxController
 
   var isLoading = false.obs;
   var isComposing = false.obs;
-  var messages = Rxn<List<Message>>();
-  var isSelf = true.obs;
+  var messages = Rx<List<Message>>([]);
+  var adminInfo = Rxn<AdminInfo>();
 
   final textController = TextEditingController();
   final focusNode = FocusNode();
-  late WebSocketChannel channel;
+  WebSocketChannel? channel;
 
   @override
   void onInit() async {
     isLoading.value = true;
     super.onInit();
 
+    _connectSocket();
+    channel!.stream.listen((message) {
+      final data = Message.fromJson(message);
+      messages.value.insert(0, data);
+      messages.refresh();
+    }, onError: (e) async {
+      await Future.delayed(const Duration(seconds: 5));
+      _connectSocket();
+    });
+    await fetchMessages();
+    await fetchAdminInfo();
+    isLoading.value = false;
+  }
+
+  void _connectSocket() {
     channel = WebSocketChannel.connect(Uri.parse(
         '${dotenv.get('WS_DOMAIN')}/msg/?token=${Get.find<SharedPreferences>().getString('access')}'));
-    channel.stream.listen((message) {
-      final data = Message.fromJson(message);
-      messages.value!.insert(0, data);
-      messages.refresh();
-    });
-
-    await fetchMessages();
-
-    isLoading.value = false;
   }
 
   Future<void> fetchMessages() async {
@@ -47,7 +54,14 @@ class InboxController extends GetxController
     }
   }
 
+  Future<void> fetchAdminInfo() async {
+    final response = await chatRepository.getAdminInfo();
+    if (response != null) {
+      adminInfo.value = response;
+    }
+  }
+
   void sendMessage(MessageCreate data) {
-    channel.sink.add(data.toJson());
+    channel!.sink.add(data.toJson());
   }
 }

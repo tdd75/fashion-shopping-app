@@ -67,10 +67,12 @@ class CartScreen extends GetView<CartController> {
           spacing: 8,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            BaseCheckbox(
-              checked: selectedIndexes[index],
-              onChecked: (value) =>
-                  controller.toggleSelectCartItem(index, value!),
+            FittedBox(
+              child: BaseCheckbox(
+                checked: selectedIndexes[index],
+                onChecked: (value) =>
+                    controller.toggleSelectCartItem(index, value!),
+              ),
             ),
             Image.network(product.image, height: 56),
           ],

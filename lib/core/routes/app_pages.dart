@@ -1,6 +1,7 @@
 import 'package:fashion_shopping_app/modules/checkout/checkout_binding.dart';
 import 'package:fashion_shopping_app/modules/checkout/checkout_screen.dart';
 import 'package:fashion_shopping_app/modules/checkout/select_ticket_screen.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/account_tab/update_information.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/favorite_tab/favorite_binding.dart';
 import 'package:fashion_shopping_app/modules/order/order_binding.dart';
 import 'package:fashion_shopping_app/modules/order/order_screen.dart';
@@ -46,8 +47,8 @@ class AppPages {
       page: () => const AuthScreen(),
       binding: AuthBinding(),
       children: [
-        GetPage(name: Routes.register, page: () => RegisterScreen()),
-        GetPage(name: Routes.login, page: () => LoginScreen()),
+        GetPage(name: Routes.register, page: () => const RegisterScreen()),
+        GetPage(name: Routes.login, page: () => const LoginScreen()),
       ],
     ),
     GetPage(
@@ -107,6 +108,11 @@ class AppPages {
           page: () => const SelectTicketScreen(),
         ),
       ],
+    ),
+    GetPage(
+      name: Routes.info,
+      page: () => const UpdateInformation(),
+      binding: AccountBinding(),
     ),
   ];
 }

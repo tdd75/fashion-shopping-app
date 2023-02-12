@@ -8,7 +8,6 @@ import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/theme/theme_data.dart';
 import 'package:fashion_shopping_app/shared/translations/app_translations.dart';
-import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,7 +42,8 @@ class MyApp extends StatelessWidget {
 
 void configLoading() {
   EasyLoading.instance
-    ..indicatorWidget = const BaseLoading()
+    ..animationStyle = EasyLoadingAnimationStyle.opacity
+    // ..indicatorWidget = const BaseLoading()
     ..boxShadow = []
     ..textColor = ColorConstants.black
     ..userInteractions = false

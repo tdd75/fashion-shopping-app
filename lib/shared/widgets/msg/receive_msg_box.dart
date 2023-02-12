@@ -8,8 +8,9 @@ import 'package:flutter/material.dart';
 
 class ReceiveMsgBox extends StatelessWidget {
   final String message;
+  final String? avatar;
 
-  const ReceiveMsgBox({super.key, required this.message});
+  const ReceiveMsgBox({super.key, required this.message, this.avatar});
 
   @override
   Widget build(BuildContext context) {
@@ -18,16 +19,12 @@ class ReceiveMsgBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // CachedNetworkImage(
-          //   width: 46,
-          //   height: 46,
-          //   fit: BoxFit.fill,
-          //   imageUrl: 'https://reqres.in/img/faces/2-image.jpg',
-          //   placeholder: (context, url) => const Image(
-          //     image: AssetImage('assets/images/icon_success.png'),
-          //   ),
-          //   errorWidget: (context, url, error) => const Icon(Icons.error),
-          // ),
+          CircleAvatar(
+            radius: 15,
+            backgroundImage: NetworkImage(
+              avatar ?? 'https://reqres.in/img/faces/2-image.jpg',
+            ),
+          ),
           const SizedBox(width: 10),
           Transform(
             alignment: Alignment.center,

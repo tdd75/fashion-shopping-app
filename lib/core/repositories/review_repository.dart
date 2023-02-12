@@ -13,7 +13,8 @@ class ReviewRepository {
   Future<ListResponse<Review>?> getList(int productId,
       {Map<String, dynamic> params = const {}}) async {
     final query = {
-      'expand': 'owner',
+      'expand': 'owner,variant',
+      'product': productId,
       ...params,
     };
     final res =

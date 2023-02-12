@@ -5,7 +5,10 @@ import 'product_detail_controller.dart';
 class ProductDetailBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ProductDetailController(
-        productRepository: Get.find(), cartRepository: Get.find()));
+    Get.create(() => ProductDetailController(
+          productRepository: Get.find(),
+          cartRepository: Get.find(),
+          reviewRepository: Get.find(),
+        ));
   }
 }

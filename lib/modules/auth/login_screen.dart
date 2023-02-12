@@ -1,4 +1,5 @@
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
+import 'package:fashion_shopping_app/modules/auth/forgot_password_screen.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
@@ -9,10 +10,8 @@ import 'package:get/get.dart';
 
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
-  final AuthController controller = Get.arguments;
-
-  LoginScreen({super.key});
+class LoginScreen extends GetView<AuthController> {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +62,19 @@ class LoginScreen extends StatelessWidget {
             _buildPasswordField(),
             const SizedBox(height: 16),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  child: Obx(() => BaseCheckbox(
+                Obx(() => SizedBox(
+                      width: 120,
+                      child: BaseCheckbox(
                         label: 'Remember me',
                         checked: controller.rememberMe.value,
                         onChecked: (value) =>
                             controller.rememberMe.value = value!,
-                      )),
-                ),
+                      ),
+                    )),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () => Get.to(const ForgotPasswordScreen()),
                   style: TextButton.styleFrom(
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),

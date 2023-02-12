@@ -1,31 +1,57 @@
+import 'package:fashion_shopping_app/shared/enums/discount_ticket_tabs.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/core/models/response/discount_ticket.dart';
 import 'package:fashion_shopping_app/core/repositories/discount_ticket_repository.dart';
 
-class DiscountTicketController extends GetxController {
+class DiscountTicketController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   final DiscountTicketRepository discountTicketRepository;
 
   DiscountTicketController({required this.discountTicketRepository});
 
   var isLoading = false.obs;
-  var discountTickets = Rx<List<DiscountTicket>>([]);
+  var newestDiscountTickets = Rx<List<DiscountTicket>>([]);
   var savedDiscountTickets = Rx<List<DiscountTicket>>([]);
+  late TabController tabController;
 
   @override
   void onInit() async {
     isLoading.value = true;
     super.onInit();
 
-    await fetchNotSavedTickets();
+    tabController =
+        TabController(vsync: this, length: DiscountTicketTabs.values.length);
+    tabController.addListener(_triggerChangeTab);
+
+    await fetchNewestTickets();
+    await fetchSavedTickets();
     isLoading.value = false;
   }
 
-  Future<void> fetchNotSavedTickets() async {
+  @override
+  void onClose() {
+    tabController.removeListener(_triggerChangeTab);
+    super.onClose();
+  }
+
+  Future<void> _triggerChangeTab() async {
+    if (tabController.indexIsChanging) return;
+    if (tabController.index != tabController.previousIndex) {
+      if (tabController.index == 0) {
+        await fetchNewestTickets();
+      } else {
+        await fetchSavedTickets();
+      }
+    }
+  }
+
+  Future<void> fetchNewestTickets() async {
     final response =
         await discountTicketRepository.getList(params: {'is_saved': false});
     if (response != null) {
-      discountTickets.value = response.results;
+      newestDiscountTickets.value = response.results;
     }
   }
 
@@ -33,11 +59,15 @@ class DiscountTicketController extends GetxController {
     final response =
         await discountTicketRepository.getList(params: {'is_saved': true});
     if (response != null) {
-      discountTickets.value = response.results;
+      savedDiscountTickets.value = response.results;
     }
   }
 
   Future<bool> saveTicket(int id) async {
-    return await discountTicketRepository.saveTicket(id);
+    final result = await discountTicketRepository.saveTicket(id);
+    if (result) {
+      await fetchNewestTickets();
+    }
+    return result;
   }
 }
