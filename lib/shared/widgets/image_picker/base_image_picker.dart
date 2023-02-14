@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class BaseImagePicker extends StatelessWidget {
-  final Widget child;
+  final Widget icon;
   final Function(XFile?) onPicked;
 
   const BaseImagePicker({
     super.key,
-    required this.child,
+    required this.icon,
     required this.onPicked,
   });
 
@@ -30,7 +30,7 @@ class BaseImagePicker extends StatelessWidget {
 
             return onPicked(imageFile);
           },
-          icon: child,
+          icon: icon,
           style: TextStyle(color: ColorConstants.primary),
           items: ImageSourceOptions.values
               .map((option) => DropdownMenuItem(

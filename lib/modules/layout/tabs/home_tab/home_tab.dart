@@ -70,7 +70,7 @@ class HomeTab extends GetView<HomeController> {
           hintStyle: const TextStyle(color: Color(0xFFACACAC)),
           filled: true,
           suffixIcon: BaseImagePicker(
-            child: const Icon(Icons.camera_alt_outlined),
+            icon: const Icon(Icons.camera_alt_outlined),
             onPicked: (file) async {
               if (file == null) return;
               EasyLoading.show();

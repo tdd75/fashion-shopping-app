@@ -40,7 +40,7 @@ class AddressScreen extends GetView<AddressController> {
             SizedBox(
               width: 220,
               child: BaseButton(
-                text: 'Add new address',
+                text: 'Create an address',
                 onPressed: () => Get.toNamed(Routes.addressDetail),
               ),
             ),
@@ -49,10 +49,18 @@ class AddressScreen extends GetView<AddressController> {
       );
     }
     return ListView.builder(
-      itemCount: addresses!.length,
+      itemCount: addresses!.length + 1,
       itemBuilder: (context, index) {
-        var address = addresses![index];
-        return _buildAddressTile(address);
+        if (index == addresses!.length) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+            child: BaseButton(
+              text: 'Add new address',
+              onPressed: () => Get.toNamed(Routes.addressDetail),
+            ),
+          );
+        }
+        return _buildAddressTile(addresses![index]);
       },
     );
   }
@@ -105,7 +113,7 @@ class AddressScreen extends GetView<AddressController> {
         ),
         trailing: GestureDetector(
           onTap: () => Get.toNamed(Routes.addressDetail, arguments: address.id),
-          child: Icon(Icons.edit, color: ColorConstants.primary, size: 18),
+          child: Icon(Icons.edit, color: ColorConstants.primary, size: 24),
         ),
       ),
     );

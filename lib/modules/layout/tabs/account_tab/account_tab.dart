@@ -1,5 +1,6 @@
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/account_tab/account_controller.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/account_tab/change_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,12 +31,13 @@ class AccountTab extends GetView<AccountController> {
         _buildButton(
           'Personal Information',
           const Icon(Icons.account_circle_outlined),
-          () => Get.toNamed(Routes.info),
+          () => Get.toNamed(Routes.userInfo),
         ),
         const SizedBox(height: 24),
         _buildButton('Privacy', const Icon(Icons.privacy_tip_outlined), () {}),
         const SizedBox(height: 24),
-        _buildButton('Change password', const Icon(Icons.lock_outlined), () {}),
+        _buildButton('Change password', const Icon(Icons.lock_outlined),
+            () => Get.to(const ChangePasswordScreen())),
         const SizedBox(height: 24),
         _buildButton('Settings', const Icon(Icons.settings_outlined), () {}),
         const SizedBox(height: 24),

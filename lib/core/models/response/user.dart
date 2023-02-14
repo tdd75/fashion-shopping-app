@@ -5,16 +5,18 @@ class User {
   final int id;
   final String email;
   final String? username;
-  final String? firstName;
-  final String? lastName;
+  final String? phone;
+  final String firstName;
+  final String lastName;
   final String? avatar;
 
   User({
     required this.id,
     required this.email,
     this.username,
-    this.firstName,
-    this.lastName,
+    this.phone,
+    required this.firstName,
+    required this.lastName,
     this.avatar,
   });
 
@@ -23,6 +25,7 @@ class User {
       'id': id,
       'email': email,
       'username': username,
+      'phone': phone,
       'first_name': firstName,
       'last_name': lastName,
       'avatar': avatar,
@@ -34,8 +37,9 @@ class User {
       id: map['id'] as int,
       email: map['email'] as String,
       username: map['username'] != null ? map['username'] as String : null,
-      firstName: map['first_name'] != null ? map['first_name'] as String : null,
-      lastName: map['last_name'] != null ? map['last_name'] as String : null,
+      phone: map['phone'] != null ? map['phone'] as String : null,
+      firstName: map['first_name'] as String,
+      lastName: map['last_name'] as String,
       avatar: map['avatar'] != null ? map['avatar'] as String : null,
     );
   }

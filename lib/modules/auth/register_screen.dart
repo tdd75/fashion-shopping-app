@@ -1,4 +1,5 @@
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
+import 'package:fashion_shopping_app/shared/constants/common.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/checkbox/base_checkbox.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
@@ -179,8 +180,8 @@ class RegisterScreen extends GetView<AuthController> {
         if (value!.isEmpty) {
           return 'Password is required.';
         }
-        if (value.length < 6 || value.length > 15) {
-          return 'Password should be 6~15 characters';
+        if (value.length < CommonConstants.passwordMinLength) {
+          return 'Password must be at least ${CommonConstants.passwordMinLength} characters.';
         }
         return null;
       },

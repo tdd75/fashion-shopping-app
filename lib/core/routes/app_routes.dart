@@ -15,5 +15,5 @@ class Routes {
   static const discountTicket = '/discount-ticket';
   static const selectTicket = '/select-ticket';
   static const checkout = '/checkout';
-  static const info = '/info';
+  static const userInfo = '/user-info';
 }

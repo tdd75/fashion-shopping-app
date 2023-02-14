@@ -6,8 +6,10 @@ class BaseInputField extends StatefulWidget {
   final String? hintText;
   final Widget? prefixIcon;
   final TextInputType? keyboardType;
-  final bool? isPasswordField;
+  final bool isPasswordField;
   final String? Function(String?)? validator;
+  final bool readOnly;
+  final String? initialValue;
 
   const BaseInputField({
     super.key,
@@ -17,6 +19,8 @@ class BaseInputField extends StatefulWidget {
     this.keyboardType,
     this.isPasswordField = false,
     this.validator,
+    this.readOnly = false,
+    this.initialValue,
   });
 
   @override
@@ -44,10 +48,12 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
       shadowColor: const Color.fromRGBO(0, 0, 0, 0.2),
       child: TextFormField(
         controller: widget.controller,
-        obscureText: widget.isPasswordField! ? !_passwordVisible : false,
+        initialValue: widget.initialValue,
+        obscureText: widget.isPasswordField ? _passwordVisible : false,
         validator: widget.validator,
         keyboardType: widget.keyboardType,
         textAlignVertical: TextAlignVertical.center,
+        readOnly: widget.readOnly,
         decoration: InputDecoration(
           isCollapsed: true,
           contentPadding:
@@ -60,9 +66,10 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
           border: _borderStyle,
           hintText: widget.hintText,
           filled: true,
-          fillColor: ColorConstants.white,
+          fillColor:
+              widget.readOnly ? ColorConstants.darkGray : ColorConstants.white,
           prefixIcon: widget.prefixIcon,
-          suffixIcon: widget.isPasswordField!
+          suffixIcon: widget.isPasswordField
               ? GestureDetector(
                   child: _passwordVisible
                       ? const Padding(
@@ -70,7 +77,8 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
                           child: Icon(Icons.visibility))
                       : const Padding(
                           padding: EdgeInsets.all(12),
-                          child: Icon(Icons.visibility_off)),
+                          child: Icon(Icons.visibility_off),
+                        ),
                   onTap: () {
                     setState(() {
                       _passwordVisible = !_passwordVisible;
