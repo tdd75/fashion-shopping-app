@@ -1,19 +1,20 @@
-import 'package:fashion_shopping_app/core/models/request/message_create.dart';
-import 'package:fashion_shopping_app/core/models/response/message.dart';
+import 'package:fashion_shopping_app/core/models/response/bot_message.dart';
+import 'package:fashion_shopping_app/core/models/response/product_short.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/chatbot_tab/chatbot_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/msg/receive_msg_box.dart';
 import 'package:fashion_shopping_app/shared/widgets/msg/send_msg_box.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
+import 'package:fashion_shopping_app/shared/widgets/product/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class InboxTab extends GetView<ChatbotController> {
-  const InboxTab({super.key});
+class ChatbotTab extends GetView<ChatbotController> {
+  const ChatbotTab({super.key});
 
   bool get isComposing => controller.isComposing.value;
-  List<Message> get messages => controller.messages.value;
+  List<BotMessage> get messages => controller.messages.value;
   TextEditingController get textController => controller.textController;
 
   @override
@@ -50,9 +51,29 @@ class InboxTab extends GetView<ChatbotController> {
         itemCount: messages.length,
         itemBuilder: (_, index) {
           final message = messages[index];
-          return message.isSelf
-              ? SendMsgBox(message: message.content)
-              : ReceiveMsgBox(message: message.content);
+          if (message.isUser != null) {
+            return SendMsgBox(message: message.text!);
+          }
+          if (message.text != null) {
+            return ReceiveMsgBox(message: message.text!);
+          }
+          if (message.custom!.payload == 'list_product') {
+            final products = message.custom!.data['list_product']
+                .map((product) => ProductShort.fromMap(product))
+                .toList();
+            return SizedBox(
+              height: 200,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ProductCard(product: product);
+                },
+              ),
+            );
+          }
+          return const SizedBox();
         },
       );
     });
@@ -94,8 +115,7 @@ class InboxTab extends GetView<ChatbotController> {
 
   void _handleSubmitted(String text) {
     textController.clear();
-    controller.sendMessage(
-        MessageCreate(content: text, receiver: controller.adminInfo.value!.id));
+    controller.sendMessage(text);
     controller.focusNode.requestFocus();
   }
 }

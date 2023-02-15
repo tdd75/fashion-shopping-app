@@ -1,5 +1,6 @@
 import 'package:fashion_shopping_app/core/models/response/product_short.dart';
 import 'package:fashion_shopping_app/modules/product_detail/review_list_screen.dart';
+import 'package:fashion_shopping_app/shared/widgets/product/product_card.dart';
 import 'package:fashion_shopping_app/shared/widgets/reviews/review_item.dart';
 import 'package:fashion_shopping_app/shared/widgets/variant_select/variant_select.dart';
 import 'package:flutter/material.dart';
@@ -360,55 +361,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             itemCount: controller.relatedProducts.value.length,
             itemBuilder: (context, index) {
               final product = controller.relatedProducts.value[index];
-              return _buildProductItem(product);
+              return ProductCard(product: product);
             },
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildProductItem(ProductShort product) {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(
-          Routes.productDetail,
-          arguments: product.id,
-          preventDuplicates: false,
-        );
-      },
-      child: SizedBox(
-        width: 160,
-        child: Card(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: SizedBox(
-                  height: 120,
-                  child: Image.network(product.image, fit: BoxFit.fitHeight),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BaseText(
-                      product.name,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    const SizedBox(height: 4),
-                    BasePriceRange(product.priceRange),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
     );
   }
 }

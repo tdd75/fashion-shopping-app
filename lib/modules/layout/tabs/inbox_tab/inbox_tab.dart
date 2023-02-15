@@ -50,9 +50,9 @@ class InboxTab extends GetView<InboxController> {
         itemCount: messages.length,
         itemBuilder: (_, index) {
           final message = messages[index];
-          return message.isSelf
-              ? SendMsgBox(message: message.content)
-              : ReceiveMsgBox(message: message.content);
+          return message.sender == controller.adminInfo.value!.id
+              ? ReceiveMsgBox(message: message.content)
+              : SendMsgBox(message: message.content);
         },
       );
     });

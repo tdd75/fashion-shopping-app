@@ -3,13 +3,15 @@ import 'dart:convert';
 
 class Message {
   final String content;
-  final bool isSelf;
+  final int sender;
+  final int receiver;
   final DateTime createdAt;
   final DateTime updatedAt;
 
   Message({
     required this.content,
-    required this.isSelf,
+    required this.sender,
+    required this.receiver,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -17,7 +19,8 @@ class Message {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'content': content,
-      'is_self': isSelf,
+      'sender': sender,
+      'receiver': receiver,
       'created_at': createdAt.toString(),
       'updated_at': updatedAt.toString(),
     };
@@ -26,7 +29,8 @@ class Message {
   factory Message.fromMap(Map<String, dynamic> map) {
     return Message(
       content: map['content'] as String,
-      isSelf: map['is_self'] as bool,
+      sender: map['sender'] as int,
+      receiver: map['receiver'] as int,
       createdAt: DateTime.parse(map['created_at'] as String),
       updatedAt: DateTime.parse(map['updated_at'] as String),
     );

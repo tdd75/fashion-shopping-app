@@ -1,6 +1,7 @@
 import 'package:fashion_shopping_app/modules/checkout/checkout_binding.dart';
 import 'package:fashion_shopping_app/modules/checkout/checkout_screen.dart';
 import 'package:fashion_shopping_app/modules/checkout/select_ticket_screen.dart';
+import 'package:fashion_shopping_app/modules/layout/tabs/chatbot_tab/chatbot_binding.dart';
 import 'package:fashion_shopping_app/modules/user_info/user_info_binding.dart';
 import 'package:fashion_shopping_app/modules/user_info/user_info_screen.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/favorite_tab/favorite_binding.dart';
@@ -59,6 +60,7 @@ class AppPages {
         LayoutBinding(),
         HomeBinding(),
         InboxBinding(),
+        ChatbotBinding(),
         AccountBinding(),
         FavoriteBinding(),
         CartBinding(),

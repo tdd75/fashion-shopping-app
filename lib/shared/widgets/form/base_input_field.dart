@@ -28,7 +28,7 @@ class BaseInputField extends StatefulWidget {
 }
 
 class _BaseTextFormFieldState extends State<BaseInputField> {
-  bool _passwordVisible = false;
+  late bool _obsecureText;
   final _borderStyle = OutlineInputBorder(
     borderRadius: BorderRadius.circular(15),
     borderSide: const BorderSide(color: Colors.transparent),
@@ -36,7 +36,7 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
 
   @override
   void initState() {
-    _passwordVisible = false;
+    _obsecureText = widget.isPasswordField;
     super.initState();
   }
 
@@ -49,7 +49,7 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
       child: TextFormField(
         controller: widget.controller,
         initialValue: widget.initialValue,
-        obscureText: widget.isPasswordField ? _passwordVisible : false,
+        obscureText: _obsecureText,
         validator: widget.validator,
         keyboardType: widget.keyboardType,
         textAlignVertical: TextAlignVertical.center,
@@ -71,7 +71,7 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.isPasswordField
               ? GestureDetector(
-                  child: _passwordVisible
+                  child: _obsecureText
                       ? const Padding(
                           padding: EdgeInsets.all(12),
                           child: Icon(Icons.visibility))
@@ -81,7 +81,7 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
                         ),
                   onTap: () {
                     setState(() {
-                      _passwordVisible = !_passwordVisible;
+                      _obsecureText = !_obsecureText;
                     });
                   },
                 )

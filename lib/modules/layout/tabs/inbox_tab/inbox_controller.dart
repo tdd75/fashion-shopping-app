@@ -26,8 +26,10 @@ class InboxController extends GetxController
   @override
   void onInit() async {
     isLoading.value = true;
+
     super.onInit();
 
+    await fetchAdminInfo();
     _connectSocket();
     channel!.stream.listen((message) {
       final data = Message.fromJson(message);
@@ -38,13 +40,12 @@ class InboxController extends GetxController
       _connectSocket();
     });
     await fetchMessages();
-    await fetchAdminInfo();
     isLoading.value = false;
   }
 
   void _connectSocket() {
     channel = WebSocketChannel.connect(Uri.parse(
-        '${dotenv.get('WS_DOMAIN')}/msg/?token=${Get.find<SharedPreferences>().getString('access')}'));
+        '${dotenv.get('WS_DOMAIN')}/msg/?token=${Get.find<SharedPreferences>().getString('access')}&receiver=${adminInfo.value!.id}'));
   }
 
   Future<void> fetchMessages() async {

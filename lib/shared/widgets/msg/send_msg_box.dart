@@ -37,7 +37,6 @@ class SendMsgBox extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 10, left: 50, top: 15, bottom: 5),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: <Widget>[
           const SizedBox(height: 30),
           messageTextGroup,

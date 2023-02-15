@@ -1,6 +1,7 @@
 enum LayoutTabs {
   home('Home'),
   inbox('Inbox'),
+  chatbot('Chatbot'),
   favorite('Favorite'),
   me('Me');
 

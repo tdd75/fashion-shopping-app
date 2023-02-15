@@ -1,5 +1,7 @@
+import 'package:fashion_shopping_app/modules/layout/tabs/chatbot_tab/chatbot_tab.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/favorite_tab/favorite_controller.dart';
 import 'package:fashion_shopping_app/shared/enums/layout_tabs.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/modules/layout/tabs/favorite_tab/favorite_tab.dart';
@@ -14,10 +16,11 @@ class LayoutController extends GetxController {
   var currentTab = LayoutTabs.home.obs;
   var user = Rxn<User>();
 
-  late HomeTab homeTab;
-  late InboxTab inboxTab;
-  late FavoriteTab favoriteTab;
-  late AccountTab accountTab;
+  late Widget homeTab;
+  late Widget inboxTab;
+  late Widget chatbotTab;
+  late Widget favoriteTab;
+  late Widget accountTab;
 
   @override
   void onInit() {
@@ -25,6 +28,7 @@ class LayoutController extends GetxController {
 
     homeTab = const HomeTab();
     inboxTab = const InboxTab();
+    chatbotTab = const ChatbotTab();
     favoriteTab = const FavoriteTab();
     accountTab = const AccountTab();
   }

@@ -39,6 +39,13 @@ class LayoutScreen extends GetView<LayoutController> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
+              Icons.smart_toy_sharp,
+              color: ColorConstants.primary,
+            ),
+            label: 'Bot',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
               Icons.favorite,
               color: ColorConstants.primary,
             ),
@@ -71,6 +78,8 @@ class LayoutScreen extends GetView<LayoutController> {
         return controller.homeTab;
       case LayoutTabs.inbox:
         return controller.inboxTab;
+      case LayoutTabs.chatbot:
+        return controller.chatbotTab;
       case LayoutTabs.me:
         return controller.accountTab;
       case LayoutTabs.favorite:

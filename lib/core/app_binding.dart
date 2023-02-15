@@ -1,4 +1,6 @@
+import 'package:fashion_shopping_app/core/api/chatbot_api_provider.dart';
 import 'package:fashion_shopping_app/core/repositories/address_repository.dart';
+import 'package:fashion_shopping_app/core/repositories/chatbot_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/review_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/transaction_repository.dart';
 import 'package:get/get.dart';
@@ -16,6 +18,7 @@ class AppBinding extends Bindings {
   @override
   void dependencies() async {
     Get.put(ApiProvider(), permanent: true);
+    Get.put(ChatbotApiProvider(), permanent: true);
     Get.put(UserRepository(), permanent: true);
     Get.put(AuthRepository(), permanent: true);
     Get.put(CartRepository(), permanent: true);
@@ -26,5 +29,6 @@ class AppBinding extends Bindings {
     Get.put(DiscountTicketRepository(), permanent: true);
     Get.put(ChatRepository(), permanent: true);
     Get.put(ReviewRepository(), permanent: true);
+    Get.put(ChatbotRepository(), permanent: true);
   }
 }
