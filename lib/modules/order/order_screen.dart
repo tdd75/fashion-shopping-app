@@ -30,21 +30,21 @@ class OrderScreen extends GetView<OrderController> {
                     hintText: 'Search by order code, product name',
                   )
                 : const Text('Order'),
-            actions: [
-              IconButton(
-                icon: Icon(
-                    controller.isSearching.value ? Icons.clear : Icons.search),
-                onPressed: () {
-                  if (controller.isSearching.value) {
-                    controller.searchController.clear();
-                    controller.isSearching.value = false;
-                    return;
-                  }
-                  controller.isSearching.value = true;
-                  // _clearSearchQuery();
-                },
-              ),
-            ],
+            // actions: [
+            //   IconButton(
+            //     icon: Icon(
+            //         controller.isSearching.value ? Icons.clear : Icons.search),
+            //     onPressed: () {
+            //       if (controller.isSearching.value) {
+            //         controller.searchController.clear();
+            //         controller.isSearching.value = false;
+            //         return;
+            //       }
+            //       controller.isSearching.value = true;
+            //       // _clearSearchQuery();
+            //     },
+            //   ),
+            // ],
             bottom: TabBar(
               isScrollable: true,
               indicatorColor: ColorConstants.primary,
