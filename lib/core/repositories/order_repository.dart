@@ -36,4 +36,14 @@ class OrderRepository {
     final res = await apiProvider.post('/orders/', data.toJson());
     return res.status.isOk ? OrderShort.fromMap(res.body) : null;
   }
+
+  Future<bool?> cancelOrder(int id) async {
+    final res = await apiProvider.post('/orders/$id/cancel/', null);
+    return res.status.isOk;
+  }
+
+  Future<bool?> confirmReceived(int id) async {
+    final res = await apiProvider.post('/orders/$id/confirm-received/', null);
+    return res.status.isOk;
+  }
 }

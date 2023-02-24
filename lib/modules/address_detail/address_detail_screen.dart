@@ -36,7 +36,6 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
                   Get.find<AddressController>()
                     ..fetchAddresses()
                     ..addresses.refresh();
-                  Get.back();
                 },
               ),
           ],

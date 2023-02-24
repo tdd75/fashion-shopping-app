@@ -22,6 +22,9 @@ class OrderController extends GetxController
   var completedOrders = Rx<List<Order>>([]);
   var cancelledOrders = Rx<List<Order>>([]);
 
+  final isSearching = false.obs;
+  final TextEditingController searchController = TextEditingController();
+
   late TabController tabController;
 
   OrderTabs get currentTab => OrderTabs.values[tabController.index];

@@ -10,11 +10,14 @@ class AddressController extends GetxController {
   var isLoading = false.obs;
   var addresses = Rx<List<Address>>([]);
 
+  bool? hasCallback;
+
   @override
   void onInit() async {
     isLoading.value = true;
     super.onInit();
 
+    hasCallback = Get.arguments;
     await fetchAddresses();
     isLoading.value = false;
   }

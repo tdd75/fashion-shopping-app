@@ -2,6 +2,7 @@ import 'package:fashion_shopping_app/core/models/request/review_create.dart';
 import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
 import 'package:fashion_shopping_app/core/repositories/review_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/transaction_repository.dart';
+import 'package:fashion_shopping_app/shared/helpers/notify.dart';
 import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/core/models/response/order.dart';
@@ -55,5 +56,11 @@ class OrderDetailController extends GetxController {
       content: content,
       rating: rating,
     ));
+  }
+
+  Future<void> cancelOrder() async {
+    await orderRepository.cancelOrder(id);
+    Notify.success('Order cancelled.');
+    await fetchOrder();
   }
 }

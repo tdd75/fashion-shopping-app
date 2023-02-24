@@ -63,6 +63,8 @@ class AddressDetailController extends GetxController {
     );
     if (id == null) {
       await addressRepository.create(saveData);
+      Get.back();
+      Notify.success('Create address successfully');
     } else {
       await addressRepository.update(id!, saveData);
       Get.back();

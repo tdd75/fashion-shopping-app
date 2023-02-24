@@ -31,7 +31,7 @@ class AuthScreen extends GetView<AuthController> {
         children: [
           Padding(
             padding: const EdgeInsets.all(96),
-            child: Image.asset('assets/icons/logo.png'),
+            child: Image.asset('assets/logo.png'),
           ),
           const SizedBox(height: 12),
           BaseText(

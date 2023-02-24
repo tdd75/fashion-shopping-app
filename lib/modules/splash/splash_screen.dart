@@ -14,7 +14,7 @@ class SplashScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 128, vertical: 16),
-            child: Image.asset('assets/icons/logo.png'),
+            child: Image.asset('assets/logo.png'),
           ),
           const BaseText(
             'Fashion Shopping App',

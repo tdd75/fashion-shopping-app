@@ -87,7 +87,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
 
   Widget _buildAddress() {
     return InkWell(
-      onTap: () => Get.toNamed(Routes.address),
+      onTap: () => Get.toNamed(Routes.address, arguments: true),
       child: Container(
         color: ColorConstants.lightGray,
         padding: const EdgeInsets.symmetric(vertical: 8),

@@ -3,6 +3,7 @@ import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
+import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_currency_text.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
@@ -23,7 +24,27 @@ class OrderScreen extends GetView<OrderController> {
         length: OrderTabs.values.length,
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Order'),
+            title: controller.isSearching.value
+                ? BaseInputField(
+                    controller: controller.searchController,
+                    hintText: 'Search by order code, product name',
+                  )
+                : const Text('Order'),
+            actions: [
+              IconButton(
+                icon: Icon(
+                    controller.isSearching.value ? Icons.clear : Icons.search),
+                onPressed: () {
+                  if (controller.isSearching.value) {
+                    controller.searchController.clear();
+                    controller.isSearching.value = false;
+                    return;
+                  }
+                  controller.isSearching.value = true;
+                  // _clearSearchQuery();
+                },
+              ),
+            ],
             bottom: TabBar(
               isScrollable: true,
               indicatorColor: ColorConstants.primary,

@@ -6,18 +6,20 @@ class BaseButton extends StatelessWidget {
   final String text;
   final void Function() onPressed;
   final double fontSize;
+  final Color? color;
 
   const BaseButton({
     super.key,
     required this.text,
     required this.onPressed,
     this.fontSize = 18,
+    this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: ColorConstants.primary,
+      color: color ?? ColorConstants.primary,
       borderRadius: BorderRadius.circular(30),
       child: InkWell(
         splashColor: Colors.greenAccent,

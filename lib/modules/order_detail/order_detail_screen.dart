@@ -1,4 +1,5 @@
 import 'package:fashion_shopping_app/core/models/response/order.dart';
+import 'package:fashion_shopping_app/modules/order/order_controller.dart';
 import 'package:fashion_shopping_app/modules/order_detail/order_detail_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
@@ -34,7 +35,8 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
                 child: Wrap(
                   children: [
                     const BaseText(
@@ -51,7 +53,10 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                   ],
                 ),
               ),
-              AddressCard(address: order.address!),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: AddressCard(address: order.address!),
+              ),
               _buildOrderItemList(),
               const SizedBox(height: 24),
               _buildOrderDetails(),
@@ -98,6 +103,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                     rating!,
                   );
                   Get.back();
+                  Notify.success('Reviews submitted successfully. Thank you!');
                 },
                 cartItem: cartItem,
               ),
@@ -106,20 +112,56 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
           await controller.fetchOrder();
         },
       );
-    } else if (controller.order.value!.stage == OrderTabs.toPay.value) {
-      button = BaseButton(
-        text: 'Pay now',
-        onPressed: () async {
-          final paymentLink =
-              await controller.transactionRepository.create(controller.id);
-          if (paymentLink != null) {
-            final paymentUri = Uri.parse(paymentLink);
-            if (await canLaunchUrl(paymentUri)) {
-              launchUrl(paymentUri);
-            }
-          }
-        },
+    } else if ([OrderTabs.toPay.value, OrderTabs.toShip.value]
+        .contains(order.stage)) {
+      button = Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (order.stage == OrderTabs.toPay.value)
+            BaseButton(
+              text: 'Pay now',
+              onPressed: () async {
+                final paymentLink = await controller.transactionRepository
+                    .create(controller.id);
+                if (paymentLink != null) {
+                  final paymentUri = Uri.parse(paymentLink);
+                  if (await canLaunchUrl(paymentUri)) {
+                    launchUrl(paymentUri);
+                  }
+                }
+              },
+            ),
+          const SizedBox(height: 8),
+          BaseButton(
+            text: 'Cancel Order',
+            onPressed: () async {
+              final res =
+                  await controller.orderRepository.cancelOrder(controller.id);
+              if (res == true) {
+                Get.back();
+                Notify.success('Order has been cancelled');
+                controller.fetchOrder();
+                final orderController = Get.find<OrderController>();
+                orderController.fetchOrders(orderController.currentTab);
+              }
+            },
+            color: ColorConstants.error,
+          ),
+        ],
       );
+    } else if (order.stage == OrderTabs.toReceive.value) {
+      button = BaseButton(
+          text: 'Confirm Received',
+          onPressed: () async {
+            final res =
+                await controller.orderRepository.confirmReceived(controller.id);
+            if (res == true) {
+              Get.back();
+              Notify.success('Update order status successfully');
+              final orderController = Get.find<OrderController>();
+              orderController.fetchOrders(orderController.currentTab);
+            }
+          });
     }
     if (button == null) return null;
     return Padding(

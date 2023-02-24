@@ -1,6 +1,7 @@
 import 'package:fashion_shopping_app/core/models/response/address.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/address/address_controller.dart';
+import 'package:fashion_shopping_app/modules/checkout/checkout_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
@@ -76,10 +77,10 @@ class AddressScreen extends GetView<AddressController> {
         leading: const Icon(Icons.location_pin),
         contentPadding: const EdgeInsets.all(12),
         onTap: () {
-          // Get.find<OrderDetailController>().address
-          //   ..value = address
-          //   ..refresh();
-          // Get.back();
+          if (controller.hasCallback == true) {
+            Get.find<CheckoutController>().address.value = address;
+            Get.back();
+          }
         },
         title: Wrap(
           spacing: 8,
