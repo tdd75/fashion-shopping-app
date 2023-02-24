@@ -57,7 +57,7 @@ class ChatbotTab extends GetView<ChatbotController> {
           if (message.text != null) {
             return ReceiveMsgBox(message: message.text!);
           }
-          if (message.custom!.payload == 'list_product') {
+          if (message.custom?.payload == 'list_product') {
             final products = message.custom!.data['list_product']
                 .map((product) => ProductShort.fromMap(product))
                 .toList();
