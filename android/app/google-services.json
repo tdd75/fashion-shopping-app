@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "432421295894",
+    "project_id": "fashion-shopping-366319",
+    "storage_bucket": "fashion-shopping-366319.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:432421295894:android:fffbfc2cd2608489eee237",
+        "android_client_info": {
+          "package_name": "com.tdd75.fashion_shopping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "432421295894-ssa4m00f0aq35nm66tjag5642ao2lh8g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD95SXyoDkvauq8p_y1gjbWPt800c-9CrI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "432421295894-ssa4m00f0aq35nm66tjag5642ao2lh8g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "432421295894-5crh8hmt49769f253dfsaauq7b08n3qo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.fashionShoppingApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
