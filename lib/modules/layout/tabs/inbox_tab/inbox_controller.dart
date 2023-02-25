@@ -51,7 +51,7 @@ class InboxController extends GetxController
   Future<void> fetchMessages() async {
     final response = await chatRepository.getList();
     if (response != null) {
-      messages.value = response.results;
+      messages.value = response.results.reversed.toList();
     }
   }
 

@@ -3,6 +3,7 @@ import 'package:fashion_shopping_app/core/repositories/auth_repository.dart';
 import 'package:fashion_shopping_app/shared/constants/storage_key.dart';
 import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/enums/layout_tabs.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -16,6 +17,7 @@ class AccountController extends GetxController {
 
   var isLoading = false.obs;
   var currentTab = LayoutTabs.home.obs;
+  var discountNotification = true.obs;
 
   final changePasswordFormKey = GlobalKey<FormState>();
   final oldPasswordController = TextEditingController();
@@ -26,6 +28,9 @@ class AccountController extends GetxController {
   void onInit() async {
     isLoading.value = true;
     super.onInit();
+
+    final prefs = Get.find<SharedPreferences>();
+    discountNotification.value = prefs.getBool('discountNotification') ?? true;
 
     isLoading.value = false;
   }
@@ -49,5 +54,13 @@ class AccountController extends GetxController {
       return result;
     }
     return null;
+  }
+
+  toggleDiscountNotification() {
+    if (discountNotification.value) {
+      FirebaseMessaging.instance.subscribeToTopic('discount');
+    } else {
+      FirebaseMessaging.instance.unsubscribeFromTopic('discount');
+    }
   }
 }

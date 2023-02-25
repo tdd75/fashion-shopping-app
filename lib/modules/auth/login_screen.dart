@@ -74,7 +74,7 @@ class LoginScreen extends GetView<AuthController> {
                       ),
                     )),
                 TextButton(
-                  onPressed: () => Get.to(const ForgotPasswordScreen()),
+                  onPressed: () => Get.to(() => const ForgotPasswordScreen()),
                   style: TextButton.styleFrom(
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   ),

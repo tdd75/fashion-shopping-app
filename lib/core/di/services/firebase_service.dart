@@ -2,6 +2,7 @@ import 'package:fashion_shopping_app/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(
@@ -29,7 +30,10 @@ class FirebaseService extends GetxService {
       provisional: false,
       sound: true,
     );
-    messaging.subscribeToTopic('discount');
+    final prefs = Get.find<SharedPreferences>();
+    if (!prefs.containsKey('discountNotification')) {
+      messaging.subscribeToTopic('discount');
+    }
     // FCM forceground message
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {

@@ -137,7 +137,7 @@ class HomeTab extends GetView<HomeController> {
             child: InkWell(
               onTap: () async {
                 await controller.getFilter();
-                Get.to(const FilterScreen());
+                Get.to(() =>const FilterScreen());
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 8),

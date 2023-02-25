@@ -44,7 +44,7 @@ class ForgotPasswordScreen extends GetView<AuthController> {
                   EasyLoading.show();
                   final result = await controller.forgotPassword();
                   EasyLoading.dismiss();
-                  if (result) Get.to(const VerifyCodeScreen());
+                  if (result) Get.to(() => const VerifyCodeScreen());
                 },
               ),
               const SizedBox(height: 8),
@@ -141,7 +141,7 @@ class VerifyCodeScreen extends GetView<AuthController> {
         final result = await controller.verifyCode();
         EasyLoading.dismiss();
         if (result) {
-          Get.to(const NewPasswordScreen());
+          Get.to(() => const NewPasswordScreen());
         } else {
           controller.verifyErrorController.add(ErrorAnimationType.shake);
         }
