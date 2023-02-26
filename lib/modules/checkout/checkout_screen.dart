@@ -22,7 +22,7 @@ import 'order_success_screen.dart';
 class CheckoutScreen extends GetView<CheckoutController> {
   const CheckoutScreen({super.key});
 
-  List<CartItem>? get cartItems => controller.cartItems;
+  List<CartItem> get cartItems => controller.cartItems;
   Address? get address => controller.address.value;
   DiscountTicket? get discountTicket => controller.selectedDiscountTicket.value;
 
@@ -120,9 +120,10 @@ class CheckoutScreen extends GetView<CheckoutController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10),
-          child: BaseText('5 items', fontSize: 16, color: Colors.grey),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: BaseText('${cartItems.length} items',
+              fontSize: 16, color: Colors.grey),
         ),
         SizedBox(
           height: 112,
@@ -130,9 +131,9 @@ class CheckoutScreen extends GetView<CheckoutController> {
             padding: const EdgeInsets.all(10),
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: cartItems!.length,
+            itemCount: cartItems.length,
             itemBuilder: (context, index) =>
-                OrderItemCard(cartItem: cartItems![index]),
+                OrderItemCard(cartItem: cartItems[index]),
             separatorBuilder: (context, index) => const SizedBox(width: 10),
           ),
         ),
@@ -161,7 +162,6 @@ class CheckoutScreen extends GetView<CheckoutController> {
                   const BaseText('Subtotal'),
                   BaseCurrencyText(
                     controller.subtotal,
-                    color: ColorConstants.black,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
@@ -200,7 +200,6 @@ class CheckoutScreen extends GetView<CheckoutController> {
               if (controller.amount != null)
                 BaseCurrencyText(
                   controller.amount!,
-                  color: ColorConstants.black,
                 ),
             ],
           ),

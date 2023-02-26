@@ -1,8 +1,8 @@
 enum LayoutTabs {
   home('Home'),
-  inbox('Inbox'),
-  chatbot('Chatbot'),
   favorite('Favorite'),
+  chatbot('Chatbot'),
+  inbox('Inbox'),
   me('Me');
 
   final String title;

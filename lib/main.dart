@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
 
 void configLoading() {
   EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.pulse
     ..animationStyle = EasyLoadingAnimationStyle.opacity
     // ..indicatorWidget = const BaseLoading()
     ..boxShadow = []

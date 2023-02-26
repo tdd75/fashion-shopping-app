@@ -32,10 +32,10 @@ class LayoutScreen extends GetView<LayoutController> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.chat,
+              Icons.favorite,
               color: ColorConstants.primary,
             ),
-            label: 'Inbox',
+            label: 'Favorite',
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -46,10 +46,10 @@ class LayoutScreen extends GetView<LayoutController> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.favorite,
+              Icons.chat,
               color: ColorConstants.primary,
             ),
-            label: 'Favorite',
+            label: 'Inbox',
           ),
           BottomNavigationBarItem(
             icon: Icon(
@@ -76,14 +76,14 @@ class LayoutScreen extends GetView<LayoutController> {
     switch (tab) {
       case LayoutTabs.home:
         return controller.homeTab;
-      case LayoutTabs.inbox:
-        return controller.inboxTab;
-      case LayoutTabs.chatbot:
-        return controller.chatbotTab;
-      case LayoutTabs.me:
-        return controller.accountTab;
       case LayoutTabs.favorite:
         return controller.favoriteTab;
+      case LayoutTabs.chatbot:
+        return controller.chatbotTab;
+      case LayoutTabs.inbox:
+        return controller.inboxTab;
+      case LayoutTabs.me:
+        return controller.accountTab;
       default:
         return controller.homeTab;
     }

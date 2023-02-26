@@ -14,7 +14,8 @@ class FilterScreen extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        controller.fetchProducts();
+        controller.query.addAll(controller.initQuery);
+        await controller.fetchProducts();
         return true;
       },
       child: Scaffold(
@@ -27,11 +28,11 @@ class FilterScreen extends GetView<HomeController> {
           children: [
             _buildPriceRange(),
             const SizedBox(height: 24),
+            _buildCategories(),
+            const SizedBox(height: 24),
             _buildColors(),
             const SizedBox(height: 24),
             _buildSizes(),
-            const SizedBox(height: 24),
-            _buildCategories(),
           ],
         ),
       ),
@@ -146,17 +147,17 @@ class FilterScreen extends GetView<HomeController> {
           const SizedBox(height: 12),
           Obx(() => VariantSelect(
                 allOptions: controller.filter.value!.categories
-                    .map((e) => VariantOption(label: e.name, value: e.id))
+                    .map((e) => VariantOption(label: e.name, value: e.name))
                     .toList(),
                 availableOptions: controller.filter.value!.categories
-                    .map((e) => VariantOption(label: e.name, value: e.id))
+                    .map((e) => VariantOption(label: e.name, value: e.name))
                     .toList(),
-                selected: controller.query['category_id'],
+                selected: controller.query['category'],
                 onSelected: (value) {
-                  if (controller.query['category_id'] == value) {
-                    controller.query['category_id'] = null;
+                  if (controller.query['category'] == value) {
+                    controller.query['category'] = null;
                   } else {
-                    controller.query['category_id'] = value;
+                    controller.query['category'] = value;
                   }
                 },
               )),

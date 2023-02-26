@@ -4,6 +4,7 @@ import 'package:fashion_shopping_app/core/models/response/product_filter.dart';
 import 'package:fashion_shopping_app/core/models/response/product_short.dart';
 import 'package:fashion_shopping_app/core/repositories/product_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -17,6 +18,7 @@ class HomeController extends GetxController {
   final filter = Rxn<ProductFilter>();
   final searchController = TextEditingController();
   final scrollController = ScrollController();
+  final queryImage = Rxn<XFile>();
 
   final initQuery = const <String, dynamic>{
     'limit': 10,
@@ -43,18 +45,21 @@ class HomeController extends GetxController {
   }
 
   void resetQuery() {
+    queryImage.value = null;
     query = RxMap<String, dynamic>.from(initQuery);
   }
 
   Future<void> _triggerloadMore() async {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
+        !scrollController.position.outOfRange &&
+        queryImage.value == null) {
       query['offset'] = query['offset'] + query['limit'];
       await fetchProducts(append: true);
     }
   }
 
   Future<void> fetchProducts({bool append = false}) async {
+    EasyLoading.show();
     final response = await productRepository.getList(params: query);
     if (response != null) {
       if (append) {
@@ -64,9 +69,11 @@ class HomeController extends GetxController {
       }
       products.refresh();
     }
+    EasyLoading.dismiss();
   }
 
   Future<void> searchByImage(XFile imageFile) async {
+    queryImage.value = imageFile;
     final data = await imageFile.readAsBytes();
     final encodedData = base64Encode(data);
     final response = await productRepository.searchByImage(encodedData);

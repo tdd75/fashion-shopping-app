@@ -44,7 +44,8 @@ class ProductCard extends StatelessWidget {
                     BaseText(
                       product.name,
                       fontSize: 14,
-                      fontWeight: FontWeight.w500,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 2,
                     ),
                     const SizedBox(height: 4),
                     BasePriceRange(product.priceRange),

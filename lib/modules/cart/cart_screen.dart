@@ -77,7 +77,12 @@ class CartScreen extends GetView<CartController> {
             Image.network(product.image, height: 56),
           ],
         ),
-        title: BaseText(product.name, fontWeight: FontWeight.w500),
+        title: BaseText(
+          product.name,
+          fontWeight: FontWeight.w500,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 2,
+        ),
         subtitle: Wrap(
           direction: Axis.vertical,
           spacing: 4,

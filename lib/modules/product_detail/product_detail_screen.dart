@@ -1,4 +1,3 @@
-import 'package:fashion_shopping_app/core/models/response/product_short.dart';
 import 'package:fashion_shopping_app/modules/product_detail/review_list_screen.dart';
 import 'package:fashion_shopping_app/shared/widgets/product/product_card.dart';
 import 'package:fashion_shopping_app/shared/widgets/reviews/review_item.dart';
@@ -156,7 +155,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          BasePriceRange(product!.priceRange, fontSize: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BasePriceRange(product!.priceRange, fontSize: 16),
+              BaseText(product!.category.name),
+            ],
+          ),
           const SizedBox(height: 12),
           BaseTile(
             initiallyExpanded: true,

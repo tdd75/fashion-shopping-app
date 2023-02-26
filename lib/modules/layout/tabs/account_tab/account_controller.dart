@@ -38,6 +38,7 @@ class AccountController extends GetxController {
   void logout() {
     final prefs = Get.find<SharedPreferences>();
     final identify = prefs.getString(StorageKey.identify);
+    FirebaseMessaging.instance.unsubscribeFromTopic('discount');
     prefs.clear();
     if (identify != null) {
       prefs.setString(StorageKey.identify, identify);
@@ -57,10 +58,12 @@ class AccountController extends GetxController {
   }
 
   toggleDiscountNotification() {
+    final prefs = Get.find<SharedPreferences>();
     if (discountNotification.value) {
       FirebaseMessaging.instance.subscribeToTopic('discount');
     } else {
       FirebaseMessaging.instance.unsubscribeFromTopic('discount');
     }
+    prefs.setBool('discountNotification', discountNotification.value);
   }
 }

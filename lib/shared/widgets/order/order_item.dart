@@ -51,41 +51,45 @@ class OrderItemCard extends StatelessWidget {
               ),
               const SizedBox(width: 12),
               Expanded(
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Wrap(
-                      direction: Axis.vertical,
-                      children: [
-                        BaseText(
-                          product.name,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        BaseText(
-                          'Color: ${productVariant.color}',
-                          color: Colors.grey,
-                        ),
-                        BaseText(
-                          'Size: ${productVariant.size}',
-                          color: Colors.grey,
-                        ),
-                        if (!isShort)
-                          BaseText(
-                            'Quantity: ${cartItem.quantity}',
-                            color: Colors.grey,
-                          ),
-                      ],
+                    BaseText(
+                      product.name,
+                      fontWeight: FontWeight.w500,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    BaseCurrencyText(
-                      productVariant.price,
-                      color: ColorConstants.black,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 14,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Wrap(
+                          direction: Axis.vertical,
+                          children: [
+                            const SizedBox(height: 4),
+                            BaseText(
+                              'Color: ${productVariant.color}',
+                              color: Colors.grey,
+                            ),
+                            BaseText(
+                              'Size: ${productVariant.size}',
+                              color: Colors.grey,
+                            ),
+                            if (!isShort)
+                              BaseText(
+                                'Quantity: ${cartItem.quantity}',
+                                color: Colors.grey,
+                              ),
+                          ],
+                        ),
+                        BaseCurrencyText(
+                          productVariant.price,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                        ),
+                      ],
                     ),
                   ],
                 ),

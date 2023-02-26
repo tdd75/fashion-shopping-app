@@ -30,21 +30,6 @@ class OrderScreen extends GetView<OrderController> {
                     hintText: 'Search by order code, product name',
                   )
                 : const Text('Order'),
-            // actions: [
-            //   IconButton(
-            //     icon: Icon(
-            //         controller.isSearching.value ? Icons.clear : Icons.search),
-            //     onPressed: () {
-            //       if (controller.isSearching.value) {
-            //         controller.searchController.clear();
-            //         controller.isSearching.value = false;
-            //         return;
-            //       }
-            //       controller.isSearching.value = true;
-            //       // _clearSearchQuery();
-            //     },
-            //   ),
-            // ],
             bottom: TabBar(
               isScrollable: true,
               indicatorColor: ColorConstants.primary,
@@ -107,36 +92,42 @@ class OrderScreen extends GetView<OrderController> {
                   ),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        BaseText(
+                          firstItem.productVariant.product!.name,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            BaseText(
-                              firstItem.productVariant.product!.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 4),
+                                BaseText(
+                                  '${firstItem.productVariant.color} - ${firstItem.productVariant.size}',
+                                  color: Colors.grey,
+                                ),
+                                BaseText(
+                                  'Quantity: ${firstItem.quantity}',
+                                  color: Colors.grey,
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 4),
-                            BaseText(
-                              '${firstItem.productVariant.color} - ${firstItem.productVariant.size}',
-                              color: Colors.grey,
-                            ),
-                            BaseText(
-                              'Quantity: ${firstItem.quantity}',
-                              color: Colors.grey,
+                            BaseCurrencyText(
+                              firstItem.productVariant.price,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black,
+                              fontSize: 14,
                             ),
                           ],
-                        ),
-                        BaseCurrencyText(
-                          firstItem.productVariant.price,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -145,7 +136,7 @@ class OrderScreen extends GetView<OrderController> {
             ),
             const Divider(),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -164,10 +155,15 @@ class OrderScreen extends GetView<OrderController> {
             ),
             Padding(
               padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Wrap(
                 children: [
-                  BaseText('Code: ${order.code}', fontSize: 16),
+                  const BaseText('Code: ', fontSize: 16),
+                  BaseText(
+                    '#${order.code}',
+                    fontSize: 16,
+                    color: ColorConstants.primary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ],
               ),
             ),

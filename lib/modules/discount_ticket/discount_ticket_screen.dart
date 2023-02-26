@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/modules/checkout/checkout_controller.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -18,25 +19,35 @@ class DiscountTicketScreen extends GetView<DiscountTicketController> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) return const BaseLoading();
-      return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          title: const Text('Discount Ticket'),
-          bottom: TabBar(
-            isScrollable: true,
-            indicatorColor: ColorConstants.primary,
-            controller: controller.tabController,
-            tabs: DiscountTicketTabs.values
-                .map((e) => Tab(text: e.title))
-                .toList(),
+      return WillPopScope(
+        onWillPop: () async {
+          try {
+            Get.find<CheckoutController>().fetchTickets();
+          } catch (e) {
+            // ignore: avoid_print
+          }
+          return true;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: const Text('Discount Ticket'),
+            bottom: TabBar(
+              isScrollable: true,
+              indicatorColor: ColorConstants.primary,
+              controller: controller.tabController,
+              tabs: DiscountTicketTabs.values
+                  .map((e) => Tab(text: e.title))
+                  .toList(),
+            ),
           ),
-        ),
-        body: TabBarView(
-          controller: controller.tabController,
-          children: [
-            _buildTicketList(controller.newestDiscountTickets.value, false),
-            _buildTicketList(controller.savedDiscountTickets.value, true),
-          ],
+          body: TabBarView(
+            controller: controller.tabController,
+            children: [
+              _buildTicketList(controller.newestDiscountTickets.value, false),
+              _buildTicketList(controller.savedDiscountTickets.value, true),
+            ],
+          ),
         ),
       );
     });

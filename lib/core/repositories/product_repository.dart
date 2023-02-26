@@ -42,7 +42,7 @@ class ProductRepository {
   }
 
   Future<Product?> get(int id) async {
-    const query = {'expand': 'variants,variants.product'};
+    const query = {'expand': 'variants,variants.product,category'};
     final res = await apiProvider.get('/products/$id/',
         query: QueryString.convert(query));
     return res.status.isOk ? Product.fromMap(res.body) : null;

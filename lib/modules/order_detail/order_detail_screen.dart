@@ -36,7 +36,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                 child: Wrap(
                   children: [
                     const BaseText(
@@ -126,7 +126,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                 if (paymentLink != null) {
                   final paymentUri = Uri.parse(paymentLink);
                   if (await canLaunchUrl(paymentUri)) {
-                    launchUrl(paymentUri);
+                    await launchUrl(paymentUri);
                   }
                 }
               },
@@ -183,7 +183,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
           ),
         ),
         ListView.separated(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           shrinkWrap: true,
           itemCount: order.orderItems.length,
           physics: const NeverScrollableScrollPhysics(),
@@ -199,7 +199,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
 
   Widget _buildOrderDetails() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -220,7 +220,6 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                     const BaseText('Subtotal'),
                     BaseCurrencyText(
                       controller.order.value!.subtotal,
-                      color: ColorConstants.black,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),
@@ -259,7 +258,6 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
               const BaseText('Amount', fontSize: 16),
               BaseCurrencyText(
                 controller.order.value!.amount,
-                color: ColorConstants.black,
               ),
             ],
           ),
@@ -270,7 +268,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
 
   Widget _buildPaymentMethod() {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

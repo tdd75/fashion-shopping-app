@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/checkout/checkout_controller.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
 import 'package:get/get.dart';
@@ -24,6 +25,14 @@ class SelectTicketScreen extends GetView<CheckoutController> {
         appBar: AppBar(
           elevation: 0,
           title: const Text('Select Ticket'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.toNamed(Routes.discountTicket);
+              },
+              child: const Icon(Icons.add_circle_outline),
+            ),
+          ],
         ),
         body: discountTickets!.isNotEmpty ? _buildTicketList() : const NoItem(),
       );

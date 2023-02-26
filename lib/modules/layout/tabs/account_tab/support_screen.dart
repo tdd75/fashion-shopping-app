@@ -19,7 +19,7 @@ class SupportScreen extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             const BaseText(
-              'If you have any questions, please contact us',
+              'Do you have any questions? Contact us:',
               fontSize: 16,
             ),
             const SizedBox(height: 12),

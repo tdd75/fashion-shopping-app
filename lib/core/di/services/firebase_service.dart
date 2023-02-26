@@ -33,6 +33,7 @@ class FirebaseService extends GetxService {
     final prefs = Get.find<SharedPreferences>();
     if (!prefs.containsKey('discountNotification')) {
       messaging.subscribeToTopic('discount');
+      prefs.setBool('discountNotification', true);
     }
     // FCM forceground message
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
+import 'package:fashion_shopping_app/core/models/response/product_category.dart';
 import 'package:fashion_shopping_app/core/models/response/product_variant.dart';
 
 class Product {
@@ -14,6 +15,7 @@ class Product {
   final bool isFavorite;
   final List<double> priceRange;
   final List<ProductVariant> productVariants;
+  final ProductCategory category;
 
   Product({
     required this.id,
@@ -26,6 +28,7 @@ class Product {
     required this.isFavorite,
     required this.priceRange,
     required this.productVariants,
+    required this.category,
   });
 
   Map<String, dynamic> toMap() {
@@ -40,6 +43,7 @@ class Product {
       'is_favorite': isFavorite,
       'price_range': priceRange,
       'product_variants': productVariants.map((x) => x.toMap()).toList(),
+      'category': category,
     };
   }
 
@@ -58,6 +62,7 @@ class Product {
         map['variants']
             .map((x) => ProductVariant.fromMap(x as Map<String, dynamic>)),
       ),
+      category: ProductCategory.fromMap(map['category']),
     );
   }
 
@@ -77,6 +82,7 @@ class Product {
     bool? isFavorite,
     List<double>? priceRange,
     List<ProductVariant>? productVariants,
+    ProductCategory? category,
   }) {
     return Product(
       id: id ?? this.id,
@@ -89,6 +95,7 @@ class Product {
       isFavorite: isFavorite ?? this.isFavorite,
       priceRange: priceRange ?? this.priceRange,
       productVariants: productVariants ?? this.productVariants,
+      category: category ?? this.category,
     );
   }
 }
