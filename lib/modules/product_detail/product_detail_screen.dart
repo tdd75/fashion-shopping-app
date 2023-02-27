@@ -218,7 +218,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     GestureDetector(
                       onTap: () {
                         controller.fetchReviews();
-                        Get.to(() => const ReviewListScreen());
+                        Get.to(
+                          () => const ReviewListScreen(),
+                          arguments: controller.id,
+                        );
                       },
                       child: BaseText(
                         'See all',

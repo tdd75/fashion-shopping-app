@@ -51,6 +51,7 @@ class ProductDetailController extends GetxController {
     isLoading.value = true;
     id = Get.arguments;
     scrollController.addListener(_triggerloadMore);
+    await fetchReviews();
     await fetchProduct();
     await fetchNewestReviews();
     await fetchRelatedProducts();
