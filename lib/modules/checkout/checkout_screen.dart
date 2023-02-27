@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/core/models/response/ComputeOrder.dart';
 import 'package:fashion_shopping_app/modules/cart/cart_controller.dart';
 import 'package:fashion_shopping_app/shared/enums/payment_method.dart';
 import 'package:fashion_shopping_app/shared/helpers/notify.dart';
@@ -24,6 +25,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
 
   List<CartItem> get cartItems => controller.cartItems;
   Address? get address => controller.address.value;
+  ComputeOrder? get computeOrder => controller.computeOrder.value;
   DiscountTicket? get discountTicket => controller.selectedDiscountTicket.value;
 
   @override
@@ -161,18 +163,18 @@ class CheckoutScreen extends GetView<CheckoutController> {
                 children: [
                   const BaseText('Subtotal'),
                   BaseCurrencyText(
-                    controller.subtotal,
+                    computeOrder!.subtotal,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
                 ],
               ),
               const SizedBox(height: 2),
-              if (controller.discount != null)
+              if (computeOrder!.discount > 0)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    BaseText('Discount', color: ColorConstants.red),
+                    const BaseText('Discount'),
                     Wrap(
                       spacing: 4,
                       children: [
@@ -182,7 +184,7 @@ class CheckoutScreen extends GetView<CheckoutController> {
                           fontWeight: FontWeight.w400,
                         ),
                         BaseCurrencyText(
-                          controller.discount!,
+                          computeOrder!.discount,
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
                         ),
@@ -197,10 +199,9 @@ class CheckoutScreen extends GetView<CheckoutController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const BaseText('Amount'),
-              if (controller.amount != null)
-                BaseCurrencyText(
-                  controller.amount!,
-                ),
+              BaseCurrencyText(
+                computeOrder!.amount,
+              ),
             ],
           ),
           const SizedBox(height: 24),
@@ -211,7 +212,10 @@ class CheckoutScreen extends GetView<CheckoutController> {
 
   Widget _buildDiscountTicket() {
     return InkWell(
-      onTap: () => Get.toNamed(Routes.checkout + Routes.selectTicket),
+      onTap: () async {
+        await controller.fetchTickets();
+        Get.toNamed(Routes.checkout + Routes.selectTicket);
+      },
       child: Container(
         color: ColorConstants.lightGray,
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),

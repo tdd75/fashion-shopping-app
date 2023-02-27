@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:fashion_shopping_app/core/api/api_provider.dart';
 import 'package:fashion_shopping_app/core/models/request/cart_create.dart';
 import 'package:fashion_shopping_app/core/models/request/cart_update.dart';
+import 'package:fashion_shopping_app/core/models/response/ComputeOrder.dart';
 import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
 import 'package:fashion_shopping_app/core/models/common/list_response.dart';
 import 'package:fashion_shopping_app/shared/helpers/query_string.dart';

@@ -54,10 +54,11 @@ class SelectTicketScreen extends GetView<CheckoutController> {
       () => CheckboxListTile(
         controlAffinity: ListTileControlAffinity.leading,
         value: selectedDiscountTicket?.id == ticket.id,
-        onChanged: (value) {
+        onChanged: (value) async {
           controller.selectedDiscountTicket
             ..value = value! ? ticket : null
             ..refresh();
+          await controller.fetchComputeOrder();
         },
         title: BaseText(
           'Get ${ticket.percent}% off${ticket.minAmount != null ? ' (minimum order: \$${ticket.minAmount})' : ''}',

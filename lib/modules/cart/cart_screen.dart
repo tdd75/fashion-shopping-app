@@ -123,10 +123,7 @@ class CartScreen extends GetView<CartController> {
             onPressed: () {
               Get.toNamed(
                 Routes.checkout,
-                arguments: {
-                  'cartItems': controller.selectedCartItems,
-                  'totalPrice': controller.totalPrice,
-                },
+                arguments: controller.selectedCartItems,
               );
             },
           ),

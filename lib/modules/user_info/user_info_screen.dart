@@ -4,7 +4,6 @@ import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/user_info/user_info_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/widgets/address/address_card.dart';
-import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
 import 'package:fashion_shopping_app/shared/widgets/image_picker/base_image_picker.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';

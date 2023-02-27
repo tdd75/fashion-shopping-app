@@ -1,11 +1,11 @@
 import 'dart:io';
 
+import 'package:fashion_shopping_app/modules/cart/cart_controller.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/home_tab/filter_screen.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/enums/order_options.dart';
 import 'package:fashion_shopping_app/shared/widgets/icon/base_badge_icon.dart';
 import 'package:fashion_shopping_app/shared/widgets/image_picker/base_image_picker.dart';
-import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_price_range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -25,6 +25,8 @@ class HomeTab extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final cartController = Get.put(CartController(cartRepository: Get.find()));
+
     return Obx(() {
       if (controller.isLoading.value) return const SizedBox();
       return NestedScrollView(
@@ -34,14 +36,14 @@ class HomeTab extends GetView<HomeController> {
             pinned: true,
             title: _buildSearchBar(),
             actions: [
-              BaseBadgeIcon(
-                number: 2,
-                icon: Icon(
-                  Icons.shopping_cart_outlined,
-                  color: ColorConstants.black,
-                ),
-                onPressed: () => Get.toNamed(Routes.cart),
-              ),
+              Obx(() => BaseBadgeIcon(
+                    number: cartController.cartItems.value.length,
+                    icon: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: ColorConstants.black,
+                    ),
+                    onPressed: () => Get.toNamed(Routes.cart),
+                  )),
             ],
           )
         ],

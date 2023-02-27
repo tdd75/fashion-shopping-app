@@ -26,46 +26,57 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) return const BaseLoading();
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Order Detail'),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                child: Wrap(
-                  children: [
-                    const BaseText(
-                      'Order Code: ',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    BaseText(
-                      '#${controller.order.value!.code}',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: ColorConstants.primary,
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: AddressCard(address: order.address!),
-              ),
-              _buildOrderItemList(),
-              const SizedBox(height: 24),
-              _buildOrderDetails(),
-              const SizedBox(height: 12),
-              _buildPaymentMethod(),
-            ],
+      return WillPopScope(
+        onWillPop: () async {
+          try {
+            final orderController = Get.find<OrderController>();
+            orderController.fetchOrdersByTab(orderController.currentTab);
+          } catch (e) {
+            // ignore
+          }
+          return true;
+        },
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Order Detail'),
           ),
+          body: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  child: Wrap(
+                    children: [
+                      const BaseText(
+                        'Order Code: ',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      BaseText(
+                        '#${controller.order.value!.code}',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        color: ColorConstants.primary,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: AddressCard(address: order.address!),
+                ),
+                _buildOrderItemList(),
+                const SizedBox(height: 24),
+                _buildOrderDetails(),
+                const SizedBox(height: 12),
+                _buildPaymentMethod(),
+              ],
+            ),
+          ),
+          bottomNavigationBar: _buildBottomBar(),
         ),
-        bottomNavigationBar: _buildBottomBar(),
       );
     });
   }
@@ -142,7 +153,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                 Notify.success('Order has been cancelled');
                 controller.fetchOrder();
                 final orderController = Get.find<OrderController>();
-                orderController.fetchOrders(orderController.currentTab);
+                orderController.fetchOrdersByTab(orderController.currentTab);
               }
             },
             color: ColorConstants.error,
@@ -159,7 +170,7 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
               Get.back();
               Notify.success('Update order status successfully');
               final orderController = Get.find<OrderController>();
-              orderController.fetchOrders(orderController.currentTab);
+              orderController.fetchOrdersByTab(orderController.currentTab);
             }
           });
     }

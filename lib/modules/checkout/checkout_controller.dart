@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/core/models/response/ComputeOrder.dart';
 import 'package:fashion_shopping_app/core/models/response/order_short.dart';
 import 'package:fashion_shopping_app/core/repositories/address_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/discount_ticket_repository.dart';
@@ -29,30 +30,30 @@ class CheckoutController extends GetxController {
   var discountTickets = Rx<List<DiscountTicket>>([]);
   var selectedDiscountTicket = Rxn<DiscountTicket>();
   var selectedPaymentMethod = Rx<PaymentMethod>(PaymentMethod.cod);
+  var computeOrder = Rxn<ComputeOrder>();
 
   List<CartItem> cartItems = [];
-  double subtotal = 0;
+  // double subtotal = 0;
 
-  double? get discount {
-    if (selectedDiscountTicket.value == null) return null;
-    return (selectedDiscountTicket.value!.percent * subtotal / 100)
-        .toPrecision(2);
-  }
+  // double? get discount {
+  //   if (selectedDiscountTicket.value == null) return null;
+  //   return (selectedDiscountTicket.value!.percent * subtotal / 100)
+  //       .toPrecision(2);
+  // }
 
-  double? get amount {
-    if (discount == null) return subtotal;
-    return (subtotal - discount!).toPrecision(2);
-  }
+  // double? get amount {
+  //   if (discount == null) return subtotal;
+  //   return (subtotal - discount!).toPrecision(2);
+  // }
 
   @override
   void onInit() async {
     isLoading.value = true;
     super.onInit();
 
-    cartItems = Get.arguments['cartItems'];
-    subtotal = Get.arguments['totalPrice'];
+    cartItems = Get.arguments;
+    await fetchComputeOrder();
     await _getDefaultAddress();
-    await fetchTickets();
     isLoading.value = false;
   }
 
@@ -79,6 +80,14 @@ class CheckoutController extends GetxController {
         await discountTicketRepository.getList(params: {'is_saved': true});
     if (response != null) {
       discountTickets.value = response.results;
+    }
+  }
+
+  Future<void> fetchComputeOrder() async {
+    final response = await orderRepository.computeOrder(
+        cartItems.map((e) => e.id).toList(), selectedDiscountTicket.value?.id);
+    if (response != null) {
+      computeOrder.value = response;
     }
   }
 }

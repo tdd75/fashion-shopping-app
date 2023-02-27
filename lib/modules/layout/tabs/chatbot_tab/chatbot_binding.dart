@@ -4,6 +4,6 @@ import 'package:get/get.dart';
 class ChatbotBinding implements Bindings {
   @override
   void dependencies() {
-    Get.lazyPut(() => ChatbotController(chatbotRepository: Get.find()));
+    Get.lazyPut(() => ChatbotController(chatRepository: Get.find()));
   }
 }

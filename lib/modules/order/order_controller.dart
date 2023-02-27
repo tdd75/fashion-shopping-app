@@ -3,6 +3,7 @@ import 'package:fashion_shopping_app/core/repositories/order_repository.dart';
 import 'package:fashion_shopping_app/core/repositories/transaction_repository.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 
 class OrderController extends GetxController
@@ -36,7 +37,7 @@ class OrderController extends GetxController
 
     tabController = TabController(vsync: this, length: OrderTabs.values.length);
     tabController.addListener(_triggerChangeTab);
-    await fetchOrders(currentTab);
+    await fetchOrdersByTab(currentTab);
     isLoading.value = false;
   }
 
@@ -49,7 +50,9 @@ class OrderController extends GetxController
   Future<void> _triggerChangeTab() async {
     if (tabController.indexIsChanging) return;
     if (tabController.index != tabController.previousIndex) {
-      fetchOrders(currentTab);
+      EasyLoading.show();
+      await fetchOrdersByTab(currentTab);
+      EasyLoading.dismiss();
     }
   }
 
@@ -70,7 +73,7 @@ class OrderController extends GetxController
     }
   }
 
-  Future<void> fetchOrders(OrderTabs tab) async {
+  Future<void> fetchOrdersByTab(OrderTabs tab) async {
     final response = await orderRepository.getList(
       params: {'stage': tab.value},
     );

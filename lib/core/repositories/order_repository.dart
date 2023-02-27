@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:fashion_shopping_app/core/api/api_provider.dart';
 import 'package:fashion_shopping_app/core/models/request/order_create.dart';
+import 'package:fashion_shopping_app/core/models/response/ComputeOrder.dart';
 import 'package:fashion_shopping_app/core/models/response/order.dart';
 import 'package:fashion_shopping_app/core/models/common/list_response.dart';
 import 'package:fashion_shopping_app/core/models/response/order_short.dart';
@@ -45,5 +47,16 @@ class OrderRepository {
   Future<bool?> confirmReceived(int id) async {
     final res = await apiProvider.post('/orders/$id/confirm-received/', null);
     return res.status.isOk;
+  }
+
+  Future<ComputeOrder?> computeOrder(
+      List<int> cartItemIds, int? discountTicketId) async {
+    final data = {
+      'cart_items': cartItemIds,
+      'discount_ticket': discountTicketId,
+    };
+    final res =
+        await apiProvider.post('/orders/compute-order/', json.encode(data));
+    return res.status.isOk ? ComputeOrder.fromMap(res.body) : null;
   }
 }

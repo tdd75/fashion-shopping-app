@@ -17,9 +17,8 @@ class BaseBadgeIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 8, right: 16),
       child: Badge(
-        alignment: const AlignmentDirectional(32, 0),
         isLabelVisible: number != 0,
         label: BaseText(number.toString(), color: ColorConstants.white),
         backgroundColor: ColorConstants.primary,

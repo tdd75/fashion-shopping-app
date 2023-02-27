@@ -1,11 +1,17 @@
 import 'package:fashion_shopping_app/core/models/response/bot_message.dart';
+import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
+import 'package:fashion_shopping_app/core/models/response/order.dart';
 import 'package:fashion_shopping_app/core/models/response/product_short.dart';
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/modules/layout/tabs/chatbot_tab/chatbot_controller.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
+import 'package:fashion_shopping_app/shared/widgets/button/base_button.dart';
+import 'package:fashion_shopping_app/shared/widgets/cart/cart_item_widget.dart';
 import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:fashion_shopping_app/shared/widgets/msg/receive_msg_box.dart';
 import 'package:fashion_shopping_app/shared/widgets/msg/send_msg_box.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
+import 'package:fashion_shopping_app/shared/widgets/order/order_card.dart';
 import 'package:fashion_shopping_app/shared/widgets/product/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -55,25 +61,70 @@ class ChatbotTab extends GetView<ChatbotController> {
             return SendMsgBox(message: message.text!);
           }
           if (message.text != null) {
-            return ReceiveMsgBox(message: message.text!);
-          }
-          if (message.custom?.payload == 'list_product') {
-            final products = message.custom!.data['list_product']
-                .map((product) => ProductShort.fromMap(product))
-                .toList();
-            return SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return ProductCard(product: product);
-                },
-              ),
+            return ReceiveMsgBox(
+              message: message.text!,
+              avatar:
+                  'https://static.vecteezy.com/system/resources/previews/004/996/790/original/robot-chatbot-icon-sign-free-vector.jpg',
             );
           }
-          return const SizedBox();
+          switch (message.custom?.payload) {
+            case 'list_product':
+              final products = message.custom!.data
+                  .map((product) => ProductShort.fromMap(product))
+                  .toList();
+              return SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return ProductCard(product: product);
+                  },
+                ),
+              );
+            case 'order_status':
+              final orders = message.custom!.data
+                  .map((order) => Order.fromMap(order))
+                  .toList();
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: orders.length,
+                itemBuilder: (context, index) {
+                  final order = orders[index];
+                  return OrderCard(order: order);
+                },
+              );
+            case 'place_order':
+              final cartItems = message.custom!.data
+                  .map((cartItem) => CartItem.fromMap(cartItem))
+                  .toList();
+              return ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: cartItems.length + 2,
+                itemBuilder: (context, index) {
+                  if (index == cartItems.length - 2) {
+                    return BaseButton(
+                      text: 'Go to cart',
+                      onPressed: () => Get.to(Routes.cart),
+                    );
+                  }
+                  if (index == cartItems.length - 2) {
+                    return BaseButton(
+                      text: 'Checkout now',
+                      onPressed: () =>
+                          Get.to(Routes.checkout, arguments: cartItems),
+                    );
+                  }
+                  final cartItem = cartItems[index];
+                  return CartItemWidget(cartItem: cartItem);
+                },
+              );
+            default:
+              return const SizedBox();
+          }
         },
       );
     });

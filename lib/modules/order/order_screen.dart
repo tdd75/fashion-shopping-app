@@ -5,6 +5,7 @@ import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
+import 'package:fashion_shopping_app/shared/widgets/order/order_card.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_currency_text.dart';
 import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:flutter/material.dart';
@@ -55,121 +56,9 @@ class OrderScreen extends GetView<OrderController> {
       itemCount: orderData.length,
       itemBuilder: (context, index) {
         final order = orderData[index];
-        final firstItem = order.orderItems[0];
-        return _buildCard(firstItem, order);
+        return OrderCard(order: order);
       },
       separatorBuilder: (context, index) => const SizedBox(height: 10),
-    );
-  }
-
-  Widget _buildCard(CartItem firstItem, Order order) {
-    return InkWell(
-      onTap: () => Get.toNamed(Routes.orderDetail, arguments: order.id),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, 1),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Image.network(
-                    firstItem.productVariant.product!.image,
-                    height: 56,
-                  ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BaseText(
-                          firstItem.productVariant.product!.name,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 4),
-                                BaseText(
-                                  '${firstItem.productVariant.color} - ${firstItem.productVariant.size}',
-                                  color: Colors.grey,
-                                ),
-                                BaseText(
-                                  'Quantity: ${firstItem.quantity}',
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            ),
-                            BaseCurrencyText(
-                              firstItem.productVariant.price,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black,
-                              fontSize: 14,
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  BaseText('${order.orderItems.length} items'),
-                  Row(
-                    children: [
-                      const BaseText('Total: '),
-                      BaseCurrencyText(
-                        order.amount,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Wrap(
-                children: [
-                  const BaseText('Code: ', fontSize: 16),
-                  BaseText(
-                    '#${order.code}',
-                    fontSize: 16,
-                    color: ColorConstants.primary,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

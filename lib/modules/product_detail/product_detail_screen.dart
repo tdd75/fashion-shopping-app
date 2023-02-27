@@ -1,3 +1,4 @@
+import 'package:fashion_shopping_app/modules/cart/cart_controller.dart';
 import 'package:fashion_shopping_app/modules/product_detail/review_list_screen.dart';
 import 'package:fashion_shopping_app/shared/widgets/product/product_card.dart';
 import 'package:fashion_shopping_app/shared/widgets/reviews/review_item.dart';
@@ -46,14 +47,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             title: Text(product!.name),
             centerTitle: true,
             actions: [
-              BaseBadgeIcon(
-                number: 1,
-                icon: Icon(
-                  Icons.shopping_cart_outlined,
-                  color: ColorConstants.black,
-                ),
-                onPressed: () => Get.toNamed(Routes.cart),
-              ),
+              Obx(() => BaseBadgeIcon(
+                    number: Get.find<CartController>().cartItems.value.length,
+                    icon: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: ColorConstants.black,
+                    ),
+                    onPressed: () => Get.toNamed(Routes.cart),
+                  )),
             ],
           ),
           body: CustomScrollView(
@@ -340,8 +341,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           const SizedBox(height: 12),
           BaseButton(
               text: 'Add to cart',
-              onPressed: () {
-                controller.addToCart();
+              onPressed: () async {
+                await controller.addToCart();
+                final cartController = Get.find<CartController>();
+                await cartController.fetchCartItems();
+                cartController.cartItems.refresh();
                 Get.back();
               }),
         ],

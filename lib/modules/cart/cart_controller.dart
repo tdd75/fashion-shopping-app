@@ -13,8 +13,24 @@ class CartController extends GetxController {
   var isLoading = false.obs;
   var cartItems = Rx<List<CartItem>>([]);
 
-  late List<TextEditingController> quantityControllers;
+  List<TextEditingController> quantityControllers = [];
   final selectedIndexes = Rx<List<bool>>([]);
+
+  @override
+  void onInit() async {
+    isLoading.value = true;
+    super.onInit();
+
+    await fetchCartItems();
+    isLoading.value = false;
+  }
+
+  void initListController() {
+    quantityControllers = cartItems.value
+        .map((e) => TextEditingController(text: e.quantity.toString()))
+        .toList();
+    selectedIndexes.value = List.filled(cartItems.value.length, false);
+  }
 
   int getId(int index) {
     return cartItems.value[index].id;
@@ -36,19 +52,6 @@ class CartController extends GetxController {
         .toPrecision(2);
   }
 
-  @override
-  void onInit() async {
-    isLoading.value = true;
-    super.onInit();
-
-    await fetchCartItems();
-    quantityControllers = cartItems.value
-        .map((e) => TextEditingController(text: e.quantity.toString()))
-        .toList();
-    selectedIndexes.value = List.filled(cartItems.value.length, false);
-    isLoading.value = false;
-  }
-
   void toggleSelectCartItem(int index, bool status) {
     selectedIndexes.value[index] = status;
     selectedIndexes.refresh();
@@ -58,6 +61,7 @@ class CartController extends GetxController {
     final response = await cartRepository.getList();
     if (response != null) {
       cartItems.value = response.results;
+      initListController();
     }
   }
 

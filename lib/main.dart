@@ -1,4 +1,3 @@
-import 'package:fashion_shopping_app/shared/widgets/loading/base_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
