@@ -95,7 +95,10 @@ class ChatbotTab extends GetView<ChatbotController> {
                   itemCount: orders.length,
                   itemBuilder: (context, index) {
                     final order = orders[index];
-                    return OrderCard(order: order);
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: OrderCard(order: order),
+                    );
                   },
                 ),
               );
