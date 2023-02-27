@@ -83,7 +83,7 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
           controller: controller.fullNameController,
           hintText: 'Full Name',
           validator: (p0) {
-            if (p0 == null || p0.isEmpty) {
+            if (p0 == null || p0.trim().isEmpty) {
               return 'Full name is required';
             }
             return null;
@@ -93,9 +93,13 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
         BaseInputField(
           controller: controller.phoneController,
           hintText: 'Phone',
+          keyboardType: TextInputType.phone,
           validator: (p0) {
-            if (p0 == null || p0.isEmpty) {
+            if (p0 == null || p0.trim().isEmpty) {
               return 'Phone is required';
+            }
+            if (p0.length < 10) {
+              return 'Phone must be at least 10 characters';
             }
             return null;
           },
@@ -114,7 +118,7 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
           controller: controller.cityController,
           hintText: 'City',
           validator: (value) {
-            if (value == null || value.isEmpty) {
+            if (value == null || value.trim().isEmpty) {
               return 'City is required';
             }
             return null;
@@ -125,7 +129,7 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
           controller: controller.districtController,
           hintText: 'District',
           validator: (p0) {
-            if (p0 == null || p0.isEmpty) {
+            if (p0 == null || p0.trim().isEmpty) {
               return 'District is required';
             }
             return null;
@@ -136,7 +140,7 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
           controller: controller.wardController,
           hintText: 'Ward',
           validator: (p0) {
-            if (p0 == null || p0.isEmpty) {
+            if (p0 == null || p0.trim().isEmpty) {
               return 'Ward is required';
             }
             return null;
@@ -147,7 +151,7 @@ class AddressDetailScreen extends GetView<AddressDetailController> {
           controller: controller.detailController,
           hintText: 'Detail',
           validator: (p0) {
-            if (p0 == null || p0.isEmpty) {
+            if (p0 == null || p0.trim().isEmpty) {
               return 'Detail is required';
             }
             return null;

@@ -87,40 +87,62 @@ class ChatbotTab extends GetView<ChatbotController> {
               final orders = message.custom!.data
                   .map((order) => Order.fromMap(order))
                   .toList();
-              return ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: orders.length,
-                itemBuilder: (context, index) {
-                  final order = orders[index];
-                  return OrderCard(order: order);
-                },
+              return Padding(
+                padding: const EdgeInsets.all(12),
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: orders.length,
+                  itemBuilder: (context, index) {
+                    final order = orders[index];
+                    return OrderCard(order: order);
+                  },
+                ),
               );
             case 'place_order':
-              final cartItems = message.custom!.data
-                  .map((cartItem) => CartItem.fromMap(cartItem))
-                  .toList();
-              return ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: cartItems.length + 2,
-                itemBuilder: (context, index) {
-                  if (index == cartItems.length - 2) {
-                    return BaseButton(
-                      text: 'Go to cart',
-                      onPressed: () => Get.to(Routes.cart),
+              final cartItems = List<CartItem>.from(message.custom!.data
+                  .map((cartItem) => CartItem.fromMap(cartItem)));
+              return Container(
+                padding: const EdgeInsets.symmetric(vertical: 16),
+                decoration: BoxDecoration(
+                  color: ColorConstants.lightGray,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: cartItems.length + 2,
+                  itemBuilder: (context, index) {
+                    if (index == cartItems.length) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 48,
+                          vertical: 8,
+                        ),
+                        child: BaseButton(
+                          text: 'No, go to cart',
+                          onPressed: () => Get.toNamed(Routes.cart),
+                        ),
+                      );
+                    }
+                    if (index == cartItems.length + 1) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 48),
+                        child: BaseButton(
+                          text: 'Yes, checkout now',
+                          onPressed: () => Get.toNamed(Routes.checkout,
+                              arguments: cartItems),
+                          color: Colors.blue,
+                        ),
+                      );
+                    }
+                    final cartItem = cartItems[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 8),
+                      child: CartItemWidget(cartItem: cartItem),
                     );
-                  }
-                  if (index == cartItems.length - 2) {
-                    return BaseButton(
-                      text: 'Checkout now',
-                      onPressed: () =>
-                          Get.to(Routes.checkout, arguments: cartItems),
-                    );
-                  }
-                  final cartItem = cartItems[index];
-                  return CartItemWidget(cartItem: cartItem);
-                },
+                  },
+                ),
               );
             default:
               return const SizedBox();
