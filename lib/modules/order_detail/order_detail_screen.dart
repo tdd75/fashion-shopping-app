@@ -75,13 +75,13 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
               ],
             ),
           ),
-          bottomNavigationBar: _buildBottomBar(),
+          bottomNavigationBar: _buildBottomBar(context),
         ),
       );
     });
   }
 
-  Widget? _buildBottomBar() {
+  Widget? _buildBottomBar(BuildContext context) {
     Widget? button;
 
     if (order.stage == OrderTabs.completed.value &&
@@ -146,15 +146,34 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
           BaseButton(
             text: 'Cancel Order',
             onPressed: () async {
-              final res =
-                  await controller.orderRepository.cancelOrder(controller.id);
-              if (res == true) {
-                Get.back();
-                Notify.success('Order has been cancelled');
-                controller.fetchOrder();
-                final orderController = Get.find<OrderController>();
-                orderController.fetchOrdersByTab(orderController.currentTab);
-              }
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Cancel Order'),
+                      content: const Text('Are you sure to cancel this order?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: const Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            final res = await controller.orderRepository
+                                .cancelOrder(controller.id);
+                            if (res == true) {
+                              Get.back();
+                              Notify.success('Order has been cancelled');
+                              controller.fetchOrder();
+                            }
+                          },
+                          child: const Text('Yes'),
+                        ),
+                      ],
+                    );
+                  });
             },
             color: ColorConstants.error,
           ),

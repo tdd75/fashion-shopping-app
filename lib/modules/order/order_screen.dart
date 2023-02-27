@@ -1,13 +1,8 @@
-import 'package:fashion_shopping_app/core/models/response/order.dart';
-import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
-import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:fashion_shopping_app/shared/constants/color.dart';
 import 'package:fashion_shopping_app/shared/enums/order_tabs.dart';
 import 'package:fashion_shopping_app/shared/widgets/form/base_input_field.dart';
 import 'package:fashion_shopping_app/shared/widgets/no_item/no_item.dart';
 import 'package:fashion_shopping_app/shared/widgets/order/order_card.dart';
-import 'package:fashion_shopping_app/shared/widgets/text/base_currency_text.dart';
-import 'package:fashion_shopping_app/shared/widgets/text/base_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
