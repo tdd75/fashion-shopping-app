@@ -74,11 +74,11 @@ class _BaseTextFormFieldState extends State<BaseInputField> {
                   child: _obsecureText
                       ? const Padding(
                           padding: EdgeInsets.all(12),
-                          child: Icon(Icons.visibility))
+                          child: Icon(Icons.visibility_off),
+                        )
                       : const Padding(
                           padding: EdgeInsets.all(12),
-                          child: Icon(Icons.visibility_off),
-                        ),
+                          child: Icon(Icons.visibility)),
                   onTap: () {
                     setState(() {
                       _obsecureText = !_obsecureText;
