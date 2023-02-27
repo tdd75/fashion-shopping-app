@@ -47,18 +47,35 @@ class OrderDetailScreen extends GetView<OrderDetailController> {
                 Padding(
                   padding:
                       const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-                  child: Wrap(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const BaseText(
-                        'Order Code: ',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
+                      Wrap(
+                        children: [
+                          const BaseText(
+                            'Order Code: ',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          BaseText(
+                            '#${controller.order.value!.code}',
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                            color: ColorConstants.primary,
+                          ),
+                        ],
                       ),
                       BaseText(
-                        '#${controller.order.value!.code}',
+                        OrderTabs.values
+                            .firstWhere((e) => e.value == order.stage)
+                            .title,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: ColorConstants.primary,
+                        color: order.stage == OrderTabs.completed.value
+                            ? ColorConstants.success
+                            : order.stage == OrderTabs.cancelled.value
+                                ? ColorConstants.error
+                                : ColorConstants.primary,
                       ),
                     ],
                   ),

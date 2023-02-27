@@ -42,9 +42,10 @@ class MyApp extends StatelessWidget {
 
 void configLoading() {
   EasyLoading.instance
-    ..indicatorType = EasyLoadingIndicatorType.pulse
-    ..animationStyle = EasyLoadingAnimationStyle.opacity
     // ..indicatorWidget = const BaseLoading()
+    ..indicatorType = EasyLoadingIndicatorType.cubeGrid
+    ..animationStyle = EasyLoadingAnimationStyle.opacity
+    ..maskColor = ColorConstants.black.withOpacity(0.2)
     ..boxShadow = []
     ..textColor = ColorConstants.black
     ..userInteractions = false
