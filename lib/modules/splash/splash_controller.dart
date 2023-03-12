@@ -9,15 +9,16 @@ class SplashController extends GetxController {
   void onReady() async {
     super.onReady();
 
-    final prefs = Get.find<SharedPreferences>();
-    try {
-      if (prefs.getString(StorageKey.access) != null) {
-        Get.toNamed(Routes.layout);
-      } else {
-        Get.toNamed(Routes.auth);
-      }
-    } catch (e) {
-      Get.toNamed(Routes.auth);
-    }
+    Get.toNamed(Routes.layout);
+    // final prefs = Get.find<SharedPreferences>();
+    // try {
+    //   if (prefs.getString(StorageKey.access) != null) {
+    //     Get.toNamed(Routes.layout);
+    //   } else {
+    //     Get.toNamed(Routes.auth);
+    //   }
+    // } catch (e) {
+    //   Get.toNamed(Routes.auth);
+    // }
   }
 }

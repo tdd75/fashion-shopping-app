@@ -2,6 +2,7 @@ import 'package:fashion_shopping_app/core/models/request/message_create.dart';
 import 'package:fashion_shopping_app/core/models/response/admin_info.dart';
 import 'package:fashion_shopping_app/core/models/response/message.dart';
 import 'package:fashion_shopping_app/core/repositories/chat_repository.dart';
+import 'package:fashion_shopping_app/core/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
@@ -31,7 +32,7 @@ class InboxController extends GetxController
 
     await fetchAdminInfo();
     _connectSocket();
-    channel!.stream.listen((message) {
+    channel?.stream.listen((message) {
       final data = Message.fromJson(message);
       messages.value.insert(0, data);
       messages.refresh();
@@ -44,6 +45,10 @@ class InboxController extends GetxController
   }
 
   void _connectSocket() {
+    if (!Get.find<SharedPreferences>().containsKey('access')) {
+      Get.toNamed(Routes.auth);
+      return;
+    }
     channel = WebSocketChannel.connect(Uri.parse(
         '${dotenv.get('WS_DOMAIN')}/msg/?token=${Get.find<SharedPreferences>().getString('access')}&receiver=${adminInfo.value!.id}'));
   }

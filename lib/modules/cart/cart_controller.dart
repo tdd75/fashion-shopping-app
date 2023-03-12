@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:fashion_shopping_app/core/models/response/cart_item.dart';
 import 'package:fashion_shopping_app/core/repositories/cart_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CartController extends GetxController {
   final CartRepository cartRepository;
@@ -21,7 +22,9 @@ class CartController extends GetxController {
     isLoading.value = true;
     super.onInit();
 
-    await fetchCartItems();
+    if (Get.find<SharedPreferences>().containsKey('access')) {
+      await fetchCartItems();
+    }
     isLoading.value = false;
   }
 
